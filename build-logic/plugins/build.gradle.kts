@@ -10,8 +10,16 @@ dependencies {
 gradlePlugin {
     plugins {
         register("androidApplicationConvention") {
-            id = "com.dewan.android.application"
+            id = "com.adewan.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
+        }
+        register("composeLibraryConvention") {
+            id = "com.adewan.compose.library"
+            implementationClass = "ComposeLibraryConventionPlugin"
+        }
+        register("kotlinLibraryConvention") {
+            id = "com.adewan.kotlin.library"
+            implementationClass = "KotlinLibraryConventionPlugin"
         }
     }
 }

@@ -1,5 +1,5 @@
 plugins {
-    id("com.dewan.android.application")
+    id("com.adewan.android.application")
 }
 
 dependencies {

@@ -8,42 +8,22 @@ import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-class AndroidApplicationConventionPlugin : Plugin<Project> {
+class ComposeLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.application")
+                apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
             }
-
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
             extensions.configure<BaseAppModuleExtension> {
-                namespace = "com.adewan.listmaker"
                 compileSdk = 32
 
                 defaultConfig {
-                    applicationId = "com.adewan.listmaker"
                     minSdk = 24
-                    targetSdk = 32
-                    versionCode = 1
-                    versionName = "1.0"
-
-                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-                    vectorDrawables {
-                        useSupportLibrary = true
-                    }
                 }
 
-                buildTypes {
-                    release {
-                        isMinifyEnabled = false
-                        proguardFiles(
-                            getDefaultProguardFile("proguard-android-optimize.txt"),
-                            "proguard-rules.pro"
-                        )
-                    }
-                }
                 compileOptions {
                     sourceCompatibility = JavaVersion.VERSION_1_8
                     targetCompatibility = JavaVersion.VERSION_1_8
@@ -53,12 +33,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                         jvmTarget = "1.8"
                     }
                 }
-                packagingOptions {
-                    resources {
-                        excludes += "/META-INF/{AL2.0,LGPL2.1}"
-                    }
-                }
-
                 buildFeatures {
                     compose = true
                 }
