@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ListMaker"
 include(":app")
+include(":ui-home")

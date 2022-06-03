@@ -1,4 +1,4 @@
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -17,7 +17,7 @@ class ComposeLibraryConventionPlugin : Plugin<Project> {
             }
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-            extensions.configure<BaseAppModuleExtension> {
+            extensions.configure<LibraryExtension> {
                 compileSdk = 32
 
                 defaultConfig {
