@@ -7,5 +7,6 @@ android {
 }
 
 dependencies {
+    api(project(":common-navigation"))
     implementation(libs.compose.material3)
 }
