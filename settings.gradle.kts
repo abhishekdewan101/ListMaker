@@ -17,4 +17,5 @@ rootProject.name = "ListMaker"
 include(":app")
 include(":common-navigation")
 include(":navigation")
+include(":ui-common")
 include(":ui-home")
