@@ -18,7 +18,7 @@ import com.adewan.listmaker.ui.common.ThemedContainer
 @Composable
 fun HomeScreen(navigator: AppNavigator) {
     ThemedContainer {
-        Scaffold(topBar = { TopBar() }) {
+        Scaffold(topBar = { TopBar(appNavigator = navigator) }) {
 
         }
     }
@@ -26,7 +26,7 @@ fun HomeScreen(navigator: AppNavigator) {
 }
 
 @Composable
-private fun TopBar() {
+private fun TopBar(appNavigator: AppNavigator) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,13 +38,13 @@ private fun TopBar() {
             "ListMaker",
             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
         )
-        AvatarImage()
+        AvatarImage(goToSettings = { appNavigator.navigateToSettings() })
     }
 }
 
 @Composable
-private fun AvatarImage() {
-    IconButton(onClick = { /*TODO*/ }) {
+private fun AvatarImage(goToSettings: () -> Unit) {
+    IconButton(onClick = goToSettings) {
         Icon(
             painter = rememberVectorPainter(image = Icons.Outlined.Face),
             modifier = Modifier.size(32.dp),

@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.adewan.listmaker.common.navigation.AppNavigatorImpl
 import com.adewan.listmaker.common.navigation.Screen
 import com.adewan.listmaker.ui.home.HomeScreen
+import com.adewan.ui.settings.SettingsScreen
 
 @Composable
 fun AppNavGraph() {
@@ -17,6 +18,9 @@ fun AppNavGraph() {
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(route = Screen.Home.route) {
             HomeScreen(navigator = appNavigator)
+        }
+        composable(route = Screen.Settings.route) {
+            SettingsScreen(navigator = appNavigator)
         }
     }
 
