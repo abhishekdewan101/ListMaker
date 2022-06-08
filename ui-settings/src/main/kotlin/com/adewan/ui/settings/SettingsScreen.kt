@@ -1,17 +1,23 @@
 package com.adewan.ui.settings
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.adewan.listmaker.common.navigation.AppNavigatorImpl
 import com.adewan.listmaker.ui.common.ThemedContainer
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(navigator: AppNavigatorImpl) {
     ThemedContainer {
-        Scaffold {
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
             Text("Hello From Settings Screen")
         }
     }
