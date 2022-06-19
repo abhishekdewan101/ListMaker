@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import com.adewan.listmaker.common.navigation.AppNavigatorImpl
 import com.adewan.listmaker.common.navigation.Screen
 import com.adewan.listmaker.ui.home.HomeScreen
-import com.adewan.ui.settings.SettingsScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -21,9 +20,5 @@ fun AppNavGraph() {
         composable(route = Screen.Home.route) {
             HomeScreen(navigator = appNavigator)
         }
-        animateFromBelowComposable(route = Screen.Settings.route) {
-            SettingsScreen(navigator = appNavigator)
-        }
     }
-
 }
