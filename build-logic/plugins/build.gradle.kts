@@ -21,5 +21,9 @@ gradlePlugin {
             id = "com.adewan.kotlin.library"
             implementationClass = "KotlinLibraryConventionPlugin"
         }
+        register("androidLibraryConvention") {
+            id = "com.adewan.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
     }
 }
