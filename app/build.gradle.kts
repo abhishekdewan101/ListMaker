@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("com.adewan.android.application")
     id("com.adewan.hilt.plugin")
@@ -7,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(project(":navigation"))
+    implementation(project(":data"))
 
     implementation(libs.compose.activity)
     implementation(libs.compose.ui)
