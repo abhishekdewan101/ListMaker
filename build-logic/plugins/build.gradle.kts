@@ -25,5 +25,9 @@ gradlePlugin {
             id = "com.adewan.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
+        register("hiltPluginConvention") {
+            id = "com.adewan.hilt.plugin"
+            implementationClass = "HiltLibraryConventionPlugin"
+        }
     }
 }
