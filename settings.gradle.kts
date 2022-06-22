@@ -16,8 +16,7 @@ dependencyResolutionManagement {
 rootProject.name = "ListMaker"
 include(":app")
 include(":common-navigation")
-include(":data")
-include(":domain")
+include(":core")
 include(":navigation")
 include(":ui-common")
 include(":ui-home")

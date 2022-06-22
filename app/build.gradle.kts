@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
     implementation(project(":navigation"))
-    implementation(project(":data"))
 
     implementation(libs.compose.activity)
     implementation(libs.compose.ui)

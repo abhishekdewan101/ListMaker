@@ -15,8 +15,11 @@ sqldelight {
 }
 
 dependencies {
-    api(project(":domain"))
-
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+
+    implementation(libs.sqlDelight.driver)
+    implementation(libs.sqlDelight.coroutines)
+
+    implementation(libs.kotlinx.coroutines)
 }
