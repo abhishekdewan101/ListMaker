@@ -38,7 +38,8 @@ class ComposeLibraryConventionPlugin : Plugin<Project> {
                     compose = true
                 }
                 composeOptions {
-                    kotlinCompilerExtensionVersion = libs.findVersion("compose").get().toString()
+                    kotlinCompilerExtensionVersion =
+                        libs.findVersion("androidxCompose").get().toString()
                 }
             }
         }

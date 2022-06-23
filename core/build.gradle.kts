@@ -16,10 +16,10 @@ sqldelight {
 
 dependencies {
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
 
-    implementation(libs.sqlDelight.driver)
+    implementation(libs.sqlDelight.android.driver)
     implementation(libs.sqlDelight.coroutines)
 
-    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.coroutines.android)
 }

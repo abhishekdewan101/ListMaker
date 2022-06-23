@@ -13,14 +13,13 @@ dependencies {
     api(project(":core"))
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.androidx.hilt.compiler)
+    kapt(libs.hilt.compiler)
+    kapt(libs.hilt.ext.compiler)
 
-    implementation(libs.compose.material3)
-    implementation(libs.compose.tooling.preview)
-    debugImplementation(libs.compose.tooling)
-
-    implementation(libs.androidx.lifecycle.viewmodel)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.material3)
+    debugApi(libs.androidx.compose.ui.tooling)
+    api(libs.androidx.compose.ui.tooling.preview)
+    
+    implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.androidx.hilt.navigation.compose)
 }

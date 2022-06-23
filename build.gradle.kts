@@ -5,9 +5,10 @@ buildscript {
     }
 
     dependencies {
-        classpath(libs.android.gradle)
-        classpath(libs.kotlin.gradle)
-        classpath(libs.sqlDelight)
-        classpath(libs.hilt.plugin)
+        classpath(libs.android.gradlePlugin)
+        classpath(libs.kotlin.gradlePlugin)
+        classpath(libs.kotlin.serializationPlugin)
+        classpath(libs.hilt.gradlePlugin)
+        classpath(libs.sqlDelight.gradlePlugin)
     }
 }
