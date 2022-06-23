@@ -7,7 +7,7 @@ type TEXT AS ListType
 );
 
 addList:
-INSERT INTO AppList(id, title, type) VALUES (id  = ?, title = ?,type =?);
+INSERT INTO AppList(id, title, type) VALUES ( ?, ?,?);
 
 getAllLists:
 SELECT * FROM AppList;
