@@ -19,7 +19,9 @@ dependencies {
     implementation(libs.material3)
     debugApi(libs.androidx.compose.ui.tooling)
     api(libs.androidx.compose.ui.tooling.preview)
-    
+
     implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(libs.kotlinx.coroutines)
 }
