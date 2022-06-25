@@ -1,12 +1,8 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
-    ExperimentalFoundationApi::class
-)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.adewan.listmaker.ui.home
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,7 +35,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
@@ -57,7 +52,9 @@ import com.adewan.listmaker.ui.common.ThemedContainer
 fun HomeScreen(navigator: AppNavigator, viewModel: HomeScreenViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     ThemedContainer {
-        Scaffold(floatingActionButton = { ListAdditionButton() }, topBar = { ListTopBar() }) {
+        Scaffold(
+            floatingActionButton = { AddListButton(navigator = navigator) },
+            topBar = { ListTopBar() }) {
             when (uiState) {
                 is HomeScreenState.Loading -> LoadingUi()
                 is HomeScreenState.EmptyList -> EmptyListUi()
@@ -145,9 +142,9 @@ private fun ListTopBar() {
 }
 
 @Composable
-private fun ListAdditionButton() {
+private fun AddListButton(navigator: AppNavigator) {
     FilledTonalButton(
-        onClick = { },
+        onClick = { navigator.navigateToAddListScreen() },
         modifier = Modifier.size(64.dp),
         shape = CircleShape,
         contentPadding = PaddingValues(0.dp),

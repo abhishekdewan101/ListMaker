@@ -9,5 +9,6 @@ android {
 dependencies {
     implementation(project(":common-navigation"))
     implementation(project(":ui-home"))
+    implementation(project(":ui-list-add"))
     implementation(libs.androidx.navigation.compose)
 }
