@@ -8,6 +8,7 @@ android {
 
 dependencies {
     api(project(":common-navigation"))
+    api(project(":core"))
     implementation(libs.accompanist.systemUiController)
     implementation(libs.material3)
     implementation(libs.androidx.compose.foundation)

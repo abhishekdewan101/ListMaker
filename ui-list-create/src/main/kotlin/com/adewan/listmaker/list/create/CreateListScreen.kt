@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.models.ListType
-import java.util.Locale
+import com.adewan.listmaker.ui.common.capitalize
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -162,10 +162,4 @@ private fun AddListTopBar(navigator: AppNavigator) {
                 .clickable { navigator.popCurrentRoute() }
         )
     }, title = {}, modifier = Modifier.padding(start = 10.dp))
-}
-
-private fun capitalize(it: ListType) = it.name.lowercase(Locale.ROOT).replaceFirstChar {
-    if (it.isLowerCase()) it.titlecase(
-        Locale.ROOT
-    ) else it.toString()
 }
