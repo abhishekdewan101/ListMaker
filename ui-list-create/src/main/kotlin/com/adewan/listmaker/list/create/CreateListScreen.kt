@@ -47,7 +47,6 @@ import java.util.Locale
 fun CreateListScreen(navigator: AppNavigator, viewModel: CreateListViewModel = hiltViewModel()) {
     val focusManger = LocalFocusManager.current
     var listName by remember { mutableStateOf(TextFieldValue("")) }
-    var dropDownExpanded by remember { mutableStateOf(false) }
     var listType by remember { mutableStateOf(ListType.GAMES) }
     var listNameInError by remember { mutableStateOf(false) }
 
@@ -83,43 +82,7 @@ fun CreateListScreen(navigator: AppNavigator, viewModel: CreateListViewModel = h
                     focusManger.clearFocus()
                 })
             )
-            ExposedDropdownMenuBox(
-                expanded = dropDownExpanded,
-                onExpandedChange = {
-                    dropDownExpanded = !dropDownExpanded
-                },
-                modifier = Modifier
-                    .padding(bottom = 15.dp)
-            ) {
-                OutlinedTextField(
-                    readOnly = true,
-                    value = capitalize(listType),
-                    onValueChange = { },
-                    label = { Text("List Type") },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = dropDownExpanded
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ExposedDropdownMenuDefaults.textFieldColors()
-                )
-                ExposedDropdownMenu(
-                    expanded = dropDownExpanded,
-                    onDismissRequest = {
-                        dropDownExpanded = false
-                    }
-                ) {
-                    ListType.values().forEach { selectionOption ->
-                        DropdownMenuItem(
-                            onClick = {
-                                listType = selectionOption
-                                dropDownExpanded = false
-                            }, text = { Text(capitalize(selectionOption)) }
-                        )
-                    }
-                }
-            }
+            ListTypeDropDown(listType = listType) { listType = it }
             FilledTonalButton(
                 onClick = {
                     if (listName.text.isEmpty()) {
@@ -144,6 +107,49 @@ fun CreateListScreen(navigator: AppNavigator, viewModel: CreateListViewModel = h
         }
     }
 }
+
+@Composable
+private fun ListTypeDropDown(listType: ListType, updateListType: (ListType) -> Unit) {
+    var dropDownExpanded by remember { mutableStateOf(false) }
+    ExposedDropdownMenuBox(
+        expanded = dropDownExpanded,
+        onExpandedChange = {
+            dropDownExpanded = !dropDownExpanded
+        },
+        modifier = Modifier
+            .padding(bottom = 15.dp)
+    ) {
+        OutlinedTextField(
+            readOnly = true,
+            value = capitalize(listType),
+            onValueChange = { },
+            label = { Text("List Type") },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(
+                    expanded = dropDownExpanded
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
+        )
+        ExposedDropdownMenu(
+            expanded = dropDownExpanded,
+            onDismissRequest = {
+                dropDownExpanded = false
+            }
+        ) {
+            ListType.values().forEach { selectionOption ->
+                DropdownMenuItem(
+                    onClick = {
+                        updateListType(selectionOption)
+                        dropDownExpanded = false
+                    }, text = { Text(capitalize(selectionOption)) }
+                )
+            }
+        }
+    }
+}
+
 
 @Composable
 private fun AddListTopBar(navigator: AppNavigator) {
