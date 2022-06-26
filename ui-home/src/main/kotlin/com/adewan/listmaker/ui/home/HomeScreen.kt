@@ -75,7 +75,9 @@ private fun ListUi(lists: List<AppList>, paddingValues: PaddingValues) {
             .padding(top = 15.dp, start = 15.dp, end = 15.dp)
             .fillMaxSize()
     ) {
-
+        item {
+            Text("Lists - ${lists.size}")
+        }
     }
 }
 

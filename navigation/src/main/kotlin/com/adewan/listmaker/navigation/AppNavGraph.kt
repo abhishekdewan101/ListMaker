@@ -6,7 +6,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import com.adewan.listmaker.common.navigation.AppNavigatorImpl
 import com.adewan.listmaker.common.navigation.Screen
-import com.adewan.listmaker.list.add.AddListScreen
+import com.adewan.listmaker.list.create.CreateListScreen
 import com.adewan.listmaker.navigation.utils.enterFromBottomExitToBottom
 import com.adewan.listmaker.ui.home.HomeScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -25,7 +25,7 @@ fun AppNavGraph() {
         }
 
         enterFromBottomExitToBottom(route = Screen.AddList.route) {
-            AddListScreen(navigator = appNavigator)
+            CreateListScreen(navigator = appNavigator)
         }
     }
 }

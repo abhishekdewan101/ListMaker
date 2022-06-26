@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.adewan.listmaker.list.add
+package com.adewan.listmaker.list.create
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -32,24 +32,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.adewan.listmaker.common.navigation.AppNavigatorImpl
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.models.ListType
 import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AddListScreen(navigator: AppNavigatorImpl) {
+fun CreateListScreen(navigator: AppNavigator, viewModel: CreateListViewModel = hiltViewModel()) {
     val focusManger = LocalFocusManager.current
     var listName by remember { mutableStateOf(TextFieldValue("")) }
     var dropDownExpanded by remember { mutableStateOf(false) }
     var listType by remember { mutableStateOf(ListType.GAMES) }
-    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+    var listNameInError by remember { mutableStateOf(false) }
 
     Scaffold(topBar = { AddListTopBar(navigator = navigator) }) { paddingValues ->
         Column(
@@ -65,12 +65,16 @@ fun AddListScreen(navigator: AppNavigatorImpl) {
             )
             OutlinedTextField(
                 value = listName,
-                onValueChange = { listName = it },
+                onValueChange = {
+                    listNameInError = it.text.isEmpty()
+                    listName = it
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 15.dp),
                 maxLines = 1,
                 singleLine = true,
+                isError = listNameInError,
                 label = {
                     Text(text = "List Name")
                 },
@@ -117,28 +121,32 @@ fun AddListScreen(navigator: AppNavigatorImpl) {
                 }
             }
             FilledTonalButton(
-                onClick = { },
+                onClick = {
+                    if (listName.text.isEmpty()) {
+                        listNameInError = true
+                    } else {
+                        viewModel.createList(title = listName.text, type = listType)
+                        navigator.popCurrentRoute()
+                    }
+                },
                 modifier = Modifier
-                    .padding(horizontal = 40.dp)
                     .fillMaxWidth(),
                 contentPadding = PaddingValues(0.dp),
-                shape = RoundedCornerShape(20),
+                shape = RoundedCornerShape(25),
                 colors = ButtonDefaults.filledTonalButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
             ) {
-                Text("Save", fontWeight = FontWeight.Bold)
+                Text(
+                    "Save",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
     }
 }
 
-private fun capitalize(it: ListType) = it.name.lowercase(Locale.ROOT).replaceFirstChar {
-    if (it.isLowerCase()) it.titlecase(
-        Locale.ROOT
-    ) else it.toString()
-}
-
 @Composable
-private fun AddListTopBar(navigator: AppNavigatorImpl) {
+private fun AddListTopBar(navigator: AppNavigator) {
     SmallTopAppBar(navigationIcon = {
         Icon(
             Icons.Default.Close,
@@ -148,4 +156,10 @@ private fun AddListTopBar(navigator: AppNavigatorImpl) {
                 .clickable { navigator.popCurrentRoute() }
         )
     }, title = {}, modifier = Modifier.padding(start = 10.dp))
+}
+
+private fun capitalize(it: ListType) = it.name.lowercase(Locale.ROOT).replaceFirstChar {
+    if (it.isLowerCase()) it.titlecase(
+        Locale.ROOT
+    ) else it.toString()
 }

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.adewan.listmaker.ui.list.add"
+    namespace = "com.adewan.listmaker.ui.list.create"
 }
 
 dependencies {
