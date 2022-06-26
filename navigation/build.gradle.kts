@@ -11,4 +11,5 @@ dependencies {
     implementation(project(":ui-home"))
     implementation(project(":ui-list-add"))
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.accompanist.navigation.animations)
 }
