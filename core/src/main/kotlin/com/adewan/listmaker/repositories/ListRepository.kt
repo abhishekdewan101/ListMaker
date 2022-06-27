@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface ListRepository {
     fun addList(id: UUID, title: String, type: ListType)
     fun getAllLists(): Flow<List<AppList>>
+    fun getListForId(id: UUID): AppList
 }

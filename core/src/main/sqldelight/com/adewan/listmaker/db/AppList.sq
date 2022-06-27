@@ -1,7 +1,7 @@
 import com.adewan.listmaker.models.ListType;
 
 CREATE TABLE AppList (
-id BLOB,
+id TEXT,
 title TEXT,
 type TEXT AS ListType
 );
@@ -11,3 +11,6 @@ INSERT INTO AppList(id, title, type) VALUES ( ?, ?,?);
 
 getAllLists:
 SELECT * FROM AppList;
+
+getListForId:
+SELECT * FROM AppList WHERE id = ?;

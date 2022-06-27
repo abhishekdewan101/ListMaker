@@ -50,7 +50,7 @@ fun CreateListScreen(navigator: AppNavigator, viewModel: CreateListViewModel = h
     var listType by remember { mutableStateOf(ListType.GAMES) }
     var listNameInError by remember { mutableStateOf(false) }
 
-    Scaffold(topBar = { AddListTopBar(navigator = navigator) }) { paddingValues ->
+    Scaffold(topBar = { CreateListTopBar(navigator = navigator) }) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -152,7 +152,7 @@ private fun ListTypeDropDown(listType: ListType, updateListType: (ListType) -> U
 
 
 @Composable
-private fun AddListTopBar(navigator: AppNavigator) {
+private fun CreateListTopBar(navigator: AppNavigator) {
     SmallTopAppBar(navigationIcon = {
         Icon(
             Icons.Default.Close,

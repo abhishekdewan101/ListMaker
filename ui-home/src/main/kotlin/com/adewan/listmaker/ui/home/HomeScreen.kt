@@ -96,7 +96,7 @@ private fun ListUi(lists: List<AppList>, paddingValues: PaddingValues, navigator
             }
             items(typeLists) {
                 Card(
-                    onClick = { navigator.navigateToListDetailScreen(UUID.nameUUIDFromBytes(it.id)) },
+                    onClick = { navigator.navigateToListDetailScreen(UUID.fromString(it.id)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(75.dp)
