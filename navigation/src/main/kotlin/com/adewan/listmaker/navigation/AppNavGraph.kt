@@ -6,6 +6,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.adewan.listmaker.add.game.AddGameScreen
 import com.adewan.listmaker.common.navigation.AppNavigatorImpl
 import com.adewan.listmaker.common.navigation.Screen
 import com.adewan.listmaker.list.create.CreateListScreen
@@ -38,6 +39,10 @@ fun AppNavGraph() {
         ) {
             val listId = it.arguments?.getString("listId")!!
             ListDetailsScreen(navigator = appNavigator, id = listId)
+        }
+
+        enterFromBottomExitToBottom(route = Screen.AddGame.route) {
+            AddGameScreen()
         }
     }
 }

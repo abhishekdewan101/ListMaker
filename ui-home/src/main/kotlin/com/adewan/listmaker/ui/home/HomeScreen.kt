@@ -4,7 +4,6 @@ package com.adewan.listmaker.ui.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -42,9 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -52,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.db.AppList
+import com.adewan.listmaker.ui.common.EmptyListScreen
 import com.adewan.listmaker.ui.common.ThemedContainer
 import com.adewan.listmaker.ui.common.capitalize
 import java.util.UUID
@@ -66,7 +64,7 @@ fun HomeScreen(navigator: AppNavigator, viewModel: HomeScreenViewModel = hiltVie
             topBar = { ListTopBar() }) {
             when (uiState) {
                 is HomeScreenState.Loading -> LoadingUi()
-                is HomeScreenState.EmptyList -> EmptyListUi()
+                is HomeScreenState.EmptyList -> EmptyListScreen(message = "You've not created any lists yet!")
                 is HomeScreenState.ListPresent -> {
                     val state = uiState as HomeScreenState.ListPresent
                     ListUi(lists = state.lists, paddingValues = it, navigator = navigator)
@@ -127,24 +125,6 @@ private fun ListUi(lists: List<AppList>, paddingValues: PaddingValues, navigator
     }
 }
 
-@Composable
-private fun EmptyListUi() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.empty_list),
-            contentDescription = "empty list icon",
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer),
-            modifier = Modifier
-                .size(128.dp)
-                .padding(bottom = 15.dp)
-        )
-        Text("No lists have been created")
-    }
-}
 
 @Composable
 private fun LoadingUi() {

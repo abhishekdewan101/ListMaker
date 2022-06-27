@@ -3,7 +3,9 @@ package com.adewan.listmaker.di
 import android.content.Context
 import com.adewan.listmaker.db.AppList
 import com.adewan.listmaker.db.ListMakerDB
+import com.adewan.listmaker.repositories.GameRepository
 import com.adewan.listmaker.repositories.ListRepository
+import com.adewan.listmaker.repositories.implemenatation.GameRepositoryImpl
 import com.adewan.listmaker.repositories.implemenatation.ListRepositoryImpl
 import com.squareup.sqldelight.EnumColumnAdapter
 import com.squareup.sqldelight.android.AndroidSqliteDriver
@@ -36,4 +38,7 @@ object DataModule {
 abstract class DataBindingModule {
     @Binds
     abstract fun bindListRepository(listRepositoryImpl: ListRepositoryImpl): ListRepository
+
+    @Binds
+    abstract fun bindGameRepository(gameRepositoryImpl: GameRepositoryImpl): GameRepository
 }

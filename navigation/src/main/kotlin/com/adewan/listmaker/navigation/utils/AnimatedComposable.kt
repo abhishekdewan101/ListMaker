@@ -3,6 +3,8 @@ package com.adewan.listmaker.navigation.utils
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -55,14 +57,12 @@ fun NavGraphBuilder.enterFromRightExitToRight(
             )
         },
         exitTransition = {
-            slideOutOfContainer(
-                AnimatedContentScope.SlideDirection.Right,
+            fadeOut(
                 animationSpec = tween(250)
             )
         },
         popEnterTransition = {
-            slideIntoContainer(
-                AnimatedContentScope.SlideDirection.Left,
+            fadeIn(
                 animationSpec = tween(250)
             )
         },

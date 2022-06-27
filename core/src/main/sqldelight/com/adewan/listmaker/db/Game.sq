@@ -1,0 +1,14 @@
+CREATE TABLE Game (
+id TEXT,
+name TEXT,
+posterUrl TEXT,
+rating INTEGER AS Int,
+parentList TEXT,
+releaseDate INTEGER
+);
+
+getAllGamesForId:
+SELECT * FROM Game WHERE parentList=?;
+
+insertGame:
+INSERT INTO Game(id, name, posterUrl, rating, parentList, releaseDate) VALUES (?,?,?,?,?,?);
