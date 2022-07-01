@@ -15,6 +15,7 @@ object ServicesModule {
     fun providesNetworkJson(): Json {
         return Json {
             ignoreUnknownKeys = true
+            isLenient = true
         }
     }
 }

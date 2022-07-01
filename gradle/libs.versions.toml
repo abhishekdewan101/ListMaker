@@ -33,6 +33,8 @@ kotlinxDatetime = "0.3.3"
 kotlinxSerializationJson = "1.3.3"
 ksp = "1.6.21-1.0.5"
 ktlint = "0.43.0"
+ktor = "2.0.3"
+ktor-ext = "1.6.1"
 lint = "30.2.1"
 material3 = "1.0.0-alpha13"
 okhttp = "4.9.3"
@@ -104,6 +106,13 @@ kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutin
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+ktor-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-logging = { group = "io.ktor", name = "ktor-client-logging-jvm", version.ref = "ktor" }
+ktor-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "ktor-ext" }
+ktor-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "ktor-ext" }
 lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "lint" }
 material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }

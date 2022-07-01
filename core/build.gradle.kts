@@ -23,6 +23,7 @@ android {
 
     defaultConfig {
         buildConfigField("String", "AuthenticationUrl", properties.getProperty("authenticationUrl"))
+        buildConfigField("String", "ClientId", properties.getProperty("clientId"))
     }
 }
 
@@ -41,8 +42,9 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.kotlin.serialization)
-    implementation(libs.okhttp.logging)
+    implementation(libs.ktor.core)
+    implementation(libs.ktor.client)
+    implementation(libs.ktor.serialization)
+    implementation(libs.ktor.logging)
+    implementation(libs.ktor.content.negotiation)
 }
