@@ -24,4 +24,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.kotlinx.coroutines)
+
+    implementation(libs.coil.kt)
+    implementation(libs.coil.kt.compose)
 }

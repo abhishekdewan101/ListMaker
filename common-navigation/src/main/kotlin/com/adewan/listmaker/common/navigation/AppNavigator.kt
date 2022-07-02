@@ -7,7 +7,7 @@ interface AppNavigator {
     fun popCurrentRoute()
     fun navigateToAddListScreen()
     fun navigateToListDetailScreen(id: UUID)
-    fun navigateToAddGameScreen()
+    fun navigateToAddGameScreen(id: String)
 }
 
 
@@ -25,7 +25,8 @@ class AppNavigatorImpl(private val navController: NavController) : AppNavigator 
         navController.navigate(injectedRoute)
     }
 
-    override fun navigateToAddGameScreen() {
-        navController.navigate(Screen.AddGame.route)
+    override fun navigateToAddGameScreen(id: String) {
+        val injectedRoute = Screen.AddGame.route.replace("{parentId}", id.toString())
+        navController.navigate(injectedRoute)
     }
 }

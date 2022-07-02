@@ -11,7 +11,7 @@ data class ListMakerGame(
     @SerialName("slug") val slug: String,
     @SerialName("name") val name: String,
     @SerialName("cover") val coverImage: ListMakerGameImage? = null,
-    @SerialName("aggregated_rating") val rating: Double? = null
+    @SerialName("aggregated_rating") val rating: Double? = null,
 )
 
 @Serializable

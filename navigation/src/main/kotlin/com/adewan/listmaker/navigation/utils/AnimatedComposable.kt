@@ -12,8 +12,13 @@ import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalAnimationApi::class)
-fun NavGraphBuilder.enterFromBottomExitToBottom(route: String, content: @Composable () -> Unit) {
+fun NavGraphBuilder.enterFromBottomExitToBottom(
+    route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
+    content: @Composable (NavBackStackEntry) -> Unit
+) {
     composable(route = route,
+        arguments = arguments,
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentScope.SlideDirection.Up,
@@ -38,7 +43,7 @@ fun NavGraphBuilder.enterFromBottomExitToBottom(route: String, content: @Composa
                 animationSpec = tween(250)
             )
         }) {
-        content()
+        content(it)
     }
 }
 

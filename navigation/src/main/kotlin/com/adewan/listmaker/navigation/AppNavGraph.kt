@@ -41,8 +41,12 @@ fun AppNavGraph() {
             ListDetailsScreen(navigator = appNavigator, id = listId)
         }
 
-        enterFromBottomExitToBottom(route = Screen.AddGame.route) {
-            AddGameScreen()
+        enterFromBottomExitToBottom(
+            route = Screen.AddGame.route,
+            arguments = listOf(navArgument("parentId") { type = NavType.StringType })
+        ) {
+            val parentListId = it.arguments?.getString("parentId")!!
+            AddGameScreen(navigator = appNavigator, parentListId = parentListId)
         }
     }
 }

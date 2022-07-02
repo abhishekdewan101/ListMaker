@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.adewan.listmaker.list.details
 
@@ -51,18 +51,22 @@ fun ListDetailsScreen(
         ListDetailUiState.Loading -> LoadingScreen()
         is ListDetailUiState.ListDetailState -> {
             val listState = uiState as ListDetailUiState.ListDetailState
-            ListDetails(navigator = navigator, state = listState)
+            ListDetails(navigator = navigator, state = listState, id = id)
         }
     }
 }
 
 @Composable
-private fun ListDetails(navigator: AppNavigator, state: ListDetailUiState.ListDetailState) {
+private fun ListDetails(
+    navigator: AppNavigator,
+    state: ListDetailUiState.ListDetailState,
+    id: String
+) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         topBar = { ListDetailTopBar(navigator = navigator, title = state.listName) },
-        floatingActionButton = { AddGameButton(navigator = navigator) }
+        floatingActionButton = { AddGameButton(navigator = navigator, parentId = id) }
     ) {
         if (state.games.isEmpty()) {
             EmptyListScreen("You've not add any games yet!")
@@ -73,6 +77,7 @@ private fun ListDetails(navigator: AppNavigator, state: ListDetailUiState.ListDe
                     .padding(it)
                     .padding(horizontal = 15.dp)
             ) {
+                
             }
         }
     }
@@ -105,9 +110,9 @@ private fun ListDetailTopBar(navigator: AppNavigator, title: String) {
 }
 
 @Composable
-private fun AddGameButton(navigator: AppNavigator) {
+private fun AddGameButton(navigator: AppNavigator, parentId: String) {
     FilledTonalButton(
-        onClick = { navigator.navigateToAddGameScreen() },
+        onClick = { navigator.navigateToAddGameScreen(id = parentId) },
         modifier = Modifier.size(64.dp),
         shape = CircleShape,
         contentPadding = PaddingValues(0.dp),
