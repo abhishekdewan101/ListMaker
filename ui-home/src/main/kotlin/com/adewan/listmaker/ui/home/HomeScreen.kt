@@ -58,16 +58,27 @@ import java.util.UUID
 @Composable
 fun HomeScreen(navigator: AppNavigator, viewModel: HomeScreenViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
+    var searchText by remember { mutableStateOf(TextFieldValue("")) }
     ThemedContainer {
         Scaffold(
             floatingActionButton = { AddListButton(navigator = navigator) },
-            topBar = { ListTopBar() }) {
+            topBar = {
+                ListTopBar(searchText = searchText) {
+                    searchText = it
+                }
+            }) {
             when (uiState) {
                 is HomeScreenState.Loading -> LoadingUi()
                 is HomeScreenState.EmptyList -> EmptyListScreen(message = "You've not created any lists yet!")
                 is HomeScreenState.ListPresent -> {
                     val state = uiState as HomeScreenState.ListPresent
-                    ListUi(lists = state.lists, paddingValues = it, navigator = navigator)
+                    val filteredLists =
+                        if (searchText.text.isBlank()) {
+                            state.lists
+                        } else {
+                            state.lists.filter { it.title?.contains(searchText.text) ?: false }
+                        }
+                    ListUi(lists = filteredLists, paddingValues = it, navigator = navigator)
                 }
             }
         }
@@ -138,8 +149,7 @@ private fun LoadingUi() {
 }
 
 @Composable
-private fun ListTopBar() {
-    var searchText by remember { mutableStateOf(TextFieldValue("")) }
+private fun ListTopBar(searchText: TextFieldValue, updateSearchText: (TextFieldValue) -> Unit) {
     val focusManger = LocalFocusManager.current
     Row(
         modifier = Modifier
@@ -156,7 +166,7 @@ private fun ListTopBar() {
                     contentDescription = "search lists icon",
                 )
             },
-            onValueChange = { searchText = it },
+            onValueChange = { updateSearchText(it) },
             modifier = Modifier
                 .fillMaxWidth(),
             maxLines = 1,
