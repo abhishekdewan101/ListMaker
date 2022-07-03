@@ -80,7 +80,7 @@ private fun ListDetails(
         floatingActionButton = { AddGameButton(navigator = navigator, parentId = id) }
     ) {
         if (state.games.isEmpty()) {
-            EmptyListScreen("You've not add any games yet!")
+            EmptyListScreen("You've not add any items yet!")
         } else {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
