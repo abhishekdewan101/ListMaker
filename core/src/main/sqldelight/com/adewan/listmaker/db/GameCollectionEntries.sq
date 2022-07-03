@@ -1,0 +1,15 @@
+CREATE TABLE GameCollectionEntries (
+slug TEXT,
+name TEXT,
+posterUrl TEXT,
+rating REAL,
+parentList TEXT,
+releaseDate INTEGER
+);
+
+getGamesForList:
+SELECT * FROM GameCollectionEntries WHERE parentList=?;
+
+insertGame:
+INSERT INTO GameCollectionEntries(slug, name, posterUrl, rating, parentList, releaseDate)
+VALUES (?,?,?,?,?,?);

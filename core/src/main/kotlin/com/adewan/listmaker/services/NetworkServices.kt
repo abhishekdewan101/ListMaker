@@ -4,7 +4,7 @@ package com.adewan.listmaker.services
 
 import com.adewan.listmaker.data.BuildConfig
 import com.adewan.listmaker.models.Authentication
-import com.adewan.listmaker.models.ListMakerGame
+import com.adewan.listmaker.models.IGDBGame
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -54,7 +54,7 @@ class NetworkServices @Inject constructor() {
         clientId: String = BuildConfig.ClientId,
         authorization: String,
         bodyQuery: String
-    ): List<ListMakerGame> {
+    ): List<IGDBGame> {
         return client.post {
             headers {
                 append("Client-ID", clientId)
@@ -66,12 +66,12 @@ class NetworkServices @Inject constructor() {
             setBody(bodyQuery)
         }.body()
     }
-    
+
     suspend fun searchForGame(
         clientId: String = BuildConfig.ClientId,
         authorization: String,
         gameQuery: String
-    ): List<ListMakerGame> {
+    ): List<IGDBGame> {
         return client.post {
             headers {
                 append("Client-ID", clientId)

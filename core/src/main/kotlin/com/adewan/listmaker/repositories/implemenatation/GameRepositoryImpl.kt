@@ -1,8 +1,8 @@
 package com.adewan.listmaker.repositories.implemenatation
 
-import com.adewan.listmaker.db.Game
+import com.adewan.listmaker.db.GameCollectionEntries
 import com.adewan.listmaker.db.ListMakerDB
-import com.adewan.listmaker.models.ListMakerGame
+import com.adewan.listmaker.models.IGDBGame
 import com.adewan.listmaker.repositories.AuthenticationRepository
 import com.adewan.listmaker.repositories.GameRepository
 import com.adewan.listmaker.services.NetworkServices
@@ -21,12 +21,12 @@ class GameRepositoryImpl @Inject constructor(
         id: UUID,
         name: String,
         posterUrl: String,
-        rating: Int,
+        rating: Double?,
         parentList: String,
-        releaseDate: Long
+        releaseDate: Long?
     ) {
-        database.gameQueries.insertGame(
-            id = id.toString(),
+        database.gameCollectionEntriesQueries.insertGame(
+            slug = id.toString(),
             name = name,
             posterUrl = posterUrl,
             rating = rating,
@@ -35,27 +35,27 @@ class GameRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getAllGamesForId(parentListId: String): Flow<List<Game>> {
-        return database.gameQueries
-            .getAllGamesForId(parentList = parentListId)
+    override fun getAllGamesForId(parentListId: String): Flow<List<GameCollectionEntries>> {
+        return database.gameCollectionEntriesQueries
+            .getGamesForList(parentList = parentListId)
             .asFlow()
             .mapToList()
     }
 
-    override suspend fun getLatestGames(): List<ListMakerGame> {
+    override suspend fun getLatestGames(): List<IGDBGame> {
         return networkServices.getLatestGames(
             authorization = authenticationRepository.authenticationState.value!!.accessToken,
-            bodyQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating;" +
+            bodyQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating, first_release_date;" +
                     "w hypes > 0 & first_release_date >= ${System.currentTimeMillis() / 1000L} & category = 0;\n" +
                     "s hypes desc;\n" +
                     "l 75;"
         )
     }
 
-    override suspend fun searchForGame(game: String): List<ListMakerGame> {
+    override suspend fun searchForGame(game: String): List<IGDBGame> {
         return networkServices.searchForGame(
             authorization = authenticationRepository.authenticationState.value!!.accessToken,
-            gameQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating;w category = 0; search \"$game\"; l 100;"
+            gameQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating, first_release_date;w category = 0; search \"$game\"; l 100;"
         )
     }
 }

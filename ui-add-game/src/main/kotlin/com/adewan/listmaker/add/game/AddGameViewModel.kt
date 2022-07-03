@@ -2,7 +2,7 @@ package com.adewan.listmaker.add.game
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.adewan.listmaker.models.ListMakerGame
+import com.adewan.listmaker.models.IGDBGame
 import com.adewan.listmaker.repositories.GameRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 sealed interface AddGameUiState {
     object Loading : AddGameUiState
-    data class Results(val results: List<ListMakerGame>, val title: String) : AddGameUiState
+    data class Results(val results: List<IGDBGame>, val title: String) : AddGameUiState
 }
 
 @HiltViewModel
@@ -32,14 +32,14 @@ class AddGameViewModel @Inject constructor(private val gameRepository: GameRepos
         }
     }
 
-    fun saveGameIntoList(parenListId: String, game: ListMakerGame) {
+    fun saveGameIntoList(parenListId: String, game: IGDBGame) {
         gameRepository.addGameIntoList(
             id = UUID.randomUUID(),
             name = game.name,
             posterUrl = game.coverImage!!.qualifiedUrl,
-            rating = game.rating?.toInt() ?: 0,
+            rating = game.rating,
             parentList = parenListId,
-            releaseDate = System.currentTimeMillis() //TODO: Fix this to be coming from game source
+            releaseDate = game.firstReleaseDate
         )
     }
 

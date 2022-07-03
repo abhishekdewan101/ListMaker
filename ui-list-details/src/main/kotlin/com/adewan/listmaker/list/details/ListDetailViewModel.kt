@@ -2,20 +2,21 @@ package com.adewan.listmaker.list.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.adewan.listmaker.db.Game
+import com.adewan.listmaker.db.GameCollectionEntries
 import com.adewan.listmaker.repositories.GameRepository
 import com.adewan.listmaker.repositories.ListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.UUID
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
+import javax.inject.Inject
 
 
 sealed interface ListDetailUiState {
     object Loading : ListDetailUiState
-    data class ListDetailState(val listName: String, val games: List<Game>) : ListDetailUiState
+    data class ListDetailState(val listName: String, val games: List<GameCollectionEntries>) :
+        ListDetailUiState
 }
 
 @HiltViewModel

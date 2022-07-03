@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.adewan.listmaker.common.navigation.AppNavigator
-import com.adewan.listmaker.models.ListMakerGame
+import com.adewan.listmaker.models.IGDBGame
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -78,7 +78,7 @@ fun AddGameScreen(
 }
 
 @Composable
-private fun ResultUiState(state: AddGameUiState.Results, onGameSelected: (ListMakerGame) -> Unit) {
+private fun ResultUiState(state: AddGameUiState.Results, onGameSelected: (IGDBGame) -> Unit) {
     Column(
         modifier = Modifier
             .padding(top = 5.dp)
