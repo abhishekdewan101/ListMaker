@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -48,7 +47,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.adewan.listmaker.common.navigation.AppNavigator
-import com.adewan.listmaker.db.AppList
+import com.adewan.listmaker.db.Collection
 import com.adewan.listmaker.ui.common.EmptyListScreen
 import com.adewan.listmaker.ui.common.ThemedContainer
 import com.adewan.listmaker.ui.common.capitalize
@@ -86,7 +85,7 @@ fun HomeScreen(navigator: AppNavigator, viewModel: HomeScreenViewModel = hiltVie
 }
 
 @Composable
-private fun ListUi(lists: List<AppList>, paddingValues: PaddingValues, navigator: AppNavigator) {
+private fun ListUi(lists: List<Collection>, paddingValues: PaddingValues, navigator: AppNavigator) {
     val groupedList = lists.groupBy { it.type }
     LazyColumn(
         modifier = Modifier
@@ -103,9 +102,10 @@ private fun ListUi(lists: List<AppList>, paddingValues: PaddingValues, navigator
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
             }
-            items(typeLists) {
+            items(typeLists.size) {
+                val item = typeLists[it]
                 Card(
-                    onClick = { navigator.navigateToListDetailScreen(UUID.fromString(it.id)) },
+                    onClick = { navigator.navigateToListDetailScreen(UUID.fromString(item.id)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(75.dp)
@@ -123,7 +123,7 @@ private fun ListUi(lists: List<AppList>, paddingValues: PaddingValues, navigator
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = it.title!!,
+                                text = item.title!!,
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSecondaryContainer
                             )

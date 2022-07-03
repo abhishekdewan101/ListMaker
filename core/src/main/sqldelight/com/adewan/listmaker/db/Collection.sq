@@ -1,0 +1,17 @@
+import com.adewan.listmaker.models.CollectionType;
+
+CREATE TABLE Collection (
+id TEXT,
+title TEXT,
+type TEXT AS CollectionType,
+createdAt INTEGER
+);
+
+insert:
+INSERT INTO Collection(id, title, type, createdAt) VALUES ( ?, ?,?,?);
+
+getAll:
+SELECT * FROM Collection;
+
+getCollectionForId:
+SELECT * FROM Collection WHERE id = ?;

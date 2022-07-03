@@ -2,17 +2,17 @@ package com.adewan.listmaker.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.adewan.listmaker.db.AppList
+import com.adewan.listmaker.db.Collection
 import com.adewan.listmaker.repositories.AuthenticationRepository
 import com.adewan.listmaker.repositories.ListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 sealed interface HomeScreenState {
-    data class ListPresent(val lists: List<AppList>) : HomeScreenState
+    data class ListPresent(val lists: List<Collection>) : HomeScreenState
     object EmptyList : HomeScreenState
     object Loading : HomeScreenState
 }

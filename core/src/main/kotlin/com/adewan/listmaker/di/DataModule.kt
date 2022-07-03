@@ -1,7 +1,7 @@
 package com.adewan.listmaker.di
 
 import android.content.Context
-import com.adewan.listmaker.db.AppList
+import com.adewan.listmaker.db.Collection
 import com.adewan.listmaker.db.ListMakerDB
 import com.adewan.listmaker.repositories.AuthenticationRepository
 import com.adewan.listmaker.repositories.GameRepository
@@ -28,7 +28,7 @@ object DataModule {
     fun providesDatabase(@ApplicationContext context: Context): ListMakerDB {
         val driver = AndroidSqliteDriver(ListMakerDB.Schema, context, "listmaker.db")
         return ListMakerDB(
-            driver = driver, AppListAdapter = AppList.Adapter(
+            driver = driver, CollectionAdapter = Collection.Adapter(
                 EnumColumnAdapter()
             )
         )

@@ -1,12 +1,12 @@
 package com.adewan.listmaker.repositories
 
-import com.adewan.listmaker.db.AppList
-import com.adewan.listmaker.models.ListType
-import java.util.UUID
+import com.adewan.listmaker.db.Collection
+import com.adewan.listmaker.models.CollectionType
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 interface ListRepository {
-    fun addList(id: UUID, title: String, type: ListType)
-    fun getAllLists(): Flow<List<AppList>>
-    fun getListForId(id: UUID): AppList
+    fun addList(id: UUID, title: String, type: CollectionType)
+    fun getAllLists(): Flow<List<Collection>>
+    fun getListForId(id: UUID): Collection
 }
