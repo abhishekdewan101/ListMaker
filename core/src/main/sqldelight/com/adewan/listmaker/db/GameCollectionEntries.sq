@@ -4,12 +4,13 @@ name TEXT,
 posterUrl TEXT,
 rating REAL,
 parentList TEXT,
-releaseDate INTEGER
+releaseDate INTEGER,
+summary TEXT
 );
 
 getGamesForList:
 SELECT * FROM GameCollectionEntries WHERE parentList=?;
 
 insertGame:
-INSERT INTO GameCollectionEntries(slug, name, posterUrl, rating, parentList, releaseDate)
-VALUES (?,?,?,?,?,?);
+INSERT INTO GameCollectionEntries(slug, name, posterUrl, rating, parentList, releaseDate, summary)
+VALUES (?,?,?,?,?,?,?);

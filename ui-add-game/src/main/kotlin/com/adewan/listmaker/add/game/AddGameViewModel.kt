@@ -39,7 +39,8 @@ class AddGameViewModel @Inject constructor(private val gameRepository: GameRepos
             posterUrl = game.coverImage!!.qualifiedUrl,
             rating = game.rating,
             parentList = parenListId,
-            releaseDate = game.firstReleaseDate
+            releaseDate = game.firstReleaseDate,
+            summary = game.summary
         )
     }
 

@@ -23,7 +23,8 @@ class GameRepositoryImpl @Inject constructor(
         posterUrl: String,
         rating: Double?,
         parentList: String,
-        releaseDate: Long?
+        releaseDate: Long?,
+        summary: String?
     ) {
         database.gameCollectionEntriesQueries.insertGame(
             slug = id.toString(),
@@ -31,7 +32,8 @@ class GameRepositoryImpl @Inject constructor(
             posterUrl = posterUrl,
             rating = rating,
             parentList = parentList,
-            releaseDate = releaseDate
+            releaseDate = releaseDate,
+            summary = summary
         )
     }
 
@@ -45,7 +47,7 @@ class GameRepositoryImpl @Inject constructor(
     override suspend fun getLatestGames(): List<IGDBGame> {
         return networkServices.getLatestGames(
             authorization = authenticationRepository.authenticationState.value!!.accessToken,
-            bodyQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating, first_release_date;" +
+            bodyQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating, first_release_date, summary;" +
                     "w hypes > 0 & first_release_date >= ${System.currentTimeMillis() / 1000L} & category = 0;\n" +
                     "s hypes desc;\n" +
                     "l 75;"
@@ -55,7 +57,7 @@ class GameRepositoryImpl @Inject constructor(
     override suspend fun searchForGame(game: String): List<IGDBGame> {
         return networkServices.searchForGame(
             authorization = authenticationRepository.authenticationState.value!!.accessToken,
-            gameQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating, first_release_date;w category = 0; search \"$game\"; l 100;"
+            gameQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating, first_release_date, summary;w category = 0; search \"$game\"; l 100;"
         )
     }
 }

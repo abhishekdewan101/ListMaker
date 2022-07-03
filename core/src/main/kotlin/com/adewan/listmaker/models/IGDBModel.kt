@@ -10,9 +10,10 @@ data class Authentication(val accessToken: String, val expiresIn: Long)
 data class IGDBGame(
     @SerialName("slug") val slug: String,
     @SerialName("name") val name: String,
-    @SerialName("cover") val coverImage: IGDBGameImage,
+    @SerialName("cover") val coverImage: IGDBGameImage? = null,
     @SerialName("aggregated_rating") val rating: Double? = null,
-    @SerialName("first_release_date") val firstReleaseDate: Long? = null
+    @SerialName("first_release_date") val firstReleaseDate: Long? = null,
+    @SerialName("summary") val summary: String? = null
 )
 
 @Serializable

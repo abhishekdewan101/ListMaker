@@ -12,7 +12,8 @@ interface GameRepository {
         posterUrl: String,
         rating: Double?,
         parentList: String,
-        releaseDate: Long?
+        releaseDate: Long?,
+        summary: String?
     )
 
     fun getAllGamesForId(parentListId: String): Flow<List<GameCollectionEntries>>
