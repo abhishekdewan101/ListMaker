@@ -20,8 +20,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -59,19 +57,20 @@ fun AddGameScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var searchTerms by remember { mutableStateOf(TextFieldValue("")) }
-    Scaffold(topBar = { GameSearchTopBar(navigator = navigator) }) {
+    Scaffold(topBar = { GameSearchTopBar(navigator = navigator) }) { padding ->
         Column(
             modifier = Modifier
-                .padding(it)
+                .padding(padding)
                 .padding(horizontal = 15.dp)
         ) {
-            GameSearchBar(value = searchTerms) {
-                searchTerms = it
+            GameSearchBar(value = searchTerms, updateValue = { searchTerms = it }) {
+                viewModel.searchForGame(searchTerms.text)
             }
             when (uiState) {
                 is AddGameUiState.Loading -> LoadingUiState()
                 is AddGameUiState.Results -> ResultUiState(state = (uiState as AddGameUiState.Results)) {
                     viewModel.saveGameIntoList(parentListId, it)
+                    navigator.popCurrentRoute()
                 }
             }
         }
@@ -97,40 +96,34 @@ private fun ResultUiState(state: AddGameUiState.Results, onGameSelected: (ListMa
             modifier = Modifier.padding(top = 15.dp)
         ) {
             items(state.results.count()) {
-                Card(
-                    onClick = { onGameSelected(state.results[it]) },
+                Column(
                     modifier = Modifier
-                        .fillMaxSize(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                        .fillMaxSize()
+                        .padding(10.dp)
+                        .clickable { onGameSelected(state.results[it]) },
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
+                    val game = state.results[it]
+                    Image(
+                        painter = rememberAsyncImagePainter(model = game.coverImage!!.qualifiedUrl),
+                        contentDescription = game.name,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(10.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        val game = state.results[it]
-                        Image(
-                            painter = rememberAsyncImagePainter(model = game.coverImage!!.qualifiedUrl),
-                            contentDescription = game.name,
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(175.dp),
-                            contentScale = ContentScale.Crop
-                        )
-                        Text(
-                            game.name,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 10.dp),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                            .width(100.dp)
+                            .height(175.dp),
+                        contentScale = ContentScale.Crop
+                    )
+                    Text(
+                        game.name,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
         }
@@ -165,7 +158,11 @@ private fun GameSearchTopBar(navigator: AppNavigator) {
 }
 
 @Composable
-private fun GameSearchBar(value: TextFieldValue, updateValue: (TextFieldValue) -> Unit) {
+private fun GameSearchBar(
+    value: TextFieldValue,
+    updateValue: (TextFieldValue) -> Unit,
+    onSearch: () -> Unit
+) {
     OutlinedTextField(
         value = value,
         onValueChange = {
@@ -182,6 +179,7 @@ private fun GameSearchBar(value: TextFieldValue, updateValue: (TextFieldValue) -
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "") },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = {
+            onSearch()
         })
     )
 }

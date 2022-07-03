@@ -18,4 +18,6 @@ interface GameRepository {
     fun getAllGamesForId(parentListId: String): Flow<List<Game>>
 
     suspend fun getLatestGames(): List<ListMakerGame>
+
+    suspend fun searchForGame(game: String): List<ListMakerGame>
 }

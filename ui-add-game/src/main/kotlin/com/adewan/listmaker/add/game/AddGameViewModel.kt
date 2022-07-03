@@ -27,7 +27,7 @@ class AddGameViewModel @Inject constructor(private val gameRepository: GameRepos
         viewModelScope.launch {
             _uiState.value = AddGameUiState.Results(
                 results = gameRepository.getLatestGames(),
-                title = "Coming Soon..."
+                title = "Coming soon"
             )
         }
     }
@@ -41,5 +41,15 @@ class AddGameViewModel @Inject constructor(private val gameRepository: GameRepos
             parentList = parenListId,
             releaseDate = System.currentTimeMillis() //TODO: Fix this to be coming from game source
         )
+    }
+
+    fun searchForGame(game: String) {
+        _uiState.value = AddGameUiState.Loading
+        viewModelScope.launch {
+            _uiState.value = AddGameUiState.Results(
+                results = gameRepository.searchForGame(game),
+                title = "Search results"
+            )
+        }
     }
 }

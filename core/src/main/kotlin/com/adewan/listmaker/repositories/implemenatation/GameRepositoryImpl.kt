@@ -45,10 +45,17 @@ class GameRepositoryImpl @Inject constructor(
     override suspend fun getLatestGames(): List<ListMakerGame> {
         return networkServices.getLatestGames(
             authorization = authenticationRepository.authenticationState.value!!.accessToken,
-            bodyQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating;\n" +
+            bodyQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating;" +
                     "w hypes > 0 & first_release_date >= ${System.currentTimeMillis() / 1000L} & category = 0;\n" +
                     "s hypes desc;\n" +
                     "l 75;"
+        )
+    }
+
+    override suspend fun searchForGame(game: String): List<ListMakerGame> {
+        return networkServices.searchForGame(
+            authorization = authenticationRepository.authenticationState.value!!.accessToken,
+            gameQuery = "f slug,name,cover.id,cover.image_id,aggregated_rating;w category = 0; search \"$game\"; l 100;"
         )
     }
 }

@@ -66,4 +66,21 @@ class NetworkServices @Inject constructor() {
             setBody(bodyQuery)
         }.body()
     }
+    
+    suspend fun searchForGame(
+        clientId: String = BuildConfig.ClientId,
+        authorization: String,
+        gameQuery: String
+    ): List<ListMakerGame> {
+        return client.post {
+            headers {
+                append("Client-ID", clientId)
+                append("Authorization", "Bearer $authorization")
+            }
+            url {
+                takeFrom("https://api.igdb.com/v4/games")
+            }
+            setBody(gameQuery)
+        }.body()
+    }
 }
