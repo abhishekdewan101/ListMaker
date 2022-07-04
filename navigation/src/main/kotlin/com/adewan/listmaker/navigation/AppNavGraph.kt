@@ -34,7 +34,7 @@ fun AppNavGraph() {
         }
 
         enterFromRightExitToRight(
-            route = Screen.ListDetail.route,
+            route = Screen.GameListDetail.route,
             arguments = listOf(navArgument("listId") { type = NavType.StringType })
         ) {
             val listId = it.arguments?.getString("listId")!!

@@ -10,7 +10,7 @@ dependencies {
     implementation(project(":common-navigation"))
     implementation(project(":ui-home"))
     implementation(project(":ui-list-create"))
-    implementation(project(":ui-list-details"))
+    implementation(project(":ui-game-list-details"))
     implementation(project(":ui-add-game"))
     implementation(libs.androidx.navigation.compose)
     implementation(libs.accompanist.navigation.animations)

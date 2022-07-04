@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
+    api(project(":core"))
     api(libs.androidx.hilt.navigation.compose)
     api(libs.androidx.navigation.compose)
 }

@@ -105,7 +105,12 @@ private fun ListUi(lists: List<Collection>, paddingValues: PaddingValues, naviga
             items(typeLists.size) {
                 val item = typeLists[it]
                 Card(
-                    onClick = { navigator.navigateToListDetailScreen(UUID.fromString(item.id)) },
+                    onClick = {
+                        navigator.navigateToListDetailScreen(
+                            UUID.fromString(item.id),
+                            item.type!!
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(75.dp)
