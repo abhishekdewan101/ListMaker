@@ -3,11 +3,11 @@ package com.adewan.listmaker.services
 import android.content.Context
 import com.adewan.listmaker.models.Authentication
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class CacheServices @Inject constructor(
