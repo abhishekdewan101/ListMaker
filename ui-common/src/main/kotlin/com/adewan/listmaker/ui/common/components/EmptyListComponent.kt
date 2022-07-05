@@ -1,4 +1,4 @@
-package com.adewan.listmaker.ui.common
+package com.adewan.listmaker.ui.common.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -14,9 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.adewan.listmaker.ui.common.R
 
 @Composable
-fun EmptyListScreen(message: String) {
+fun EmptyListComponent(message: String) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.adewan.listmaker.common.navigation.AppNavigator
-import com.adewan.listmaker.ui.common.EmptyListScreen
+import com.adewan.listmaker.ui.common.components.EmptyListComponent
 import kotlin.math.roundToInt
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -84,7 +84,7 @@ private fun ListDetails(
         floatingActionButton = { AddGameButton(navigator = navigator, parentId = id) }
     ) {
         if (state.games.isEmpty()) {
-            EmptyListScreen("You've not add any items yet!")
+            EmptyListComponent("You've not add any items yet!")
         } else {
             LazyColumn(
                 modifier = Modifier.padding(it)

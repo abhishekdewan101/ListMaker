@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -38,7 +37,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -48,9 +46,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.db.Collection
-import com.adewan.listmaker.ui.common.EmptyListScreen
-import com.adewan.listmaker.ui.common.ThemedContainer
 import com.adewan.listmaker.ui.common.capitalize
+import com.adewan.listmaker.ui.common.components.EmptyListComponent
+import com.adewan.listmaker.ui.common.components.LoadingComponent
+import com.adewan.listmaker.ui.common.components.ThemedContainerComponent
 import java.util.UUID
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -58,26 +57,30 @@ import java.util.UUID
 fun HomeScreen(navigator: AppNavigator, viewModel: HomeScreenViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
-    ThemedContainer {
+    ThemedContainerComponent {
         Scaffold(
-            floatingActionButton = { AddListButton(navigator = navigator) },
+            floatingActionButton = { CreateListButton(navigator = navigator) },
             topBar = {
                 ListTopBar(searchText = searchText) {
                     searchText = it
                 }
-            }) {
+            }) { paddingValues ->
             when (uiState) {
-                is HomeScreenState.Loading -> LoadingUi()
-                is HomeScreenState.EmptyList -> EmptyListScreen(message = "You've not created any lists yet!")
-                is HomeScreenState.ListPresent -> {
-                    val state = uiState as HomeScreenState.ListPresent
+                is HomeScreenState.Loading -> LoadingComponent()
+                is HomeScreenState.Empty -> EmptyListComponent(message = "You've not created any lists yet!")
+                is HomeScreenState.Result -> {
+                    val state = uiState as HomeScreenState.Result
                     val filteredLists =
                         if (searchText.text.isBlank()) {
-                            state.lists
+                            state.data
                         } else {
-                            state.lists.filter { it.title?.contains(searchText.text) ?: false }
+                            state.data.filter { it.title?.contains(searchText.text) ?: false }
                         }
-                    ListUi(lists = filteredLists, paddingValues = it, navigator = navigator)
+                    HomeScreenListComponent(
+                        lists = filteredLists,
+                        paddingValues = paddingValues,
+                        navigator = navigator
+                    )
                 }
             }
         }
@@ -85,7 +88,11 @@ fun HomeScreen(navigator: AppNavigator, viewModel: HomeScreenViewModel = hiltVie
 }
 
 @Composable
-private fun ListUi(lists: List<Collection>, paddingValues: PaddingValues, navigator: AppNavigator) {
+private fun HomeScreenListComponent(
+    lists: List<Collection>,
+    paddingValues: PaddingValues,
+    navigator: AppNavigator
+) {
     val groupedList = lists.groupBy { it.type }
     LazyColumn(
         modifier = Modifier
@@ -143,17 +150,6 @@ private fun ListUi(lists: List<Collection>, paddingValues: PaddingValues, naviga
 
 
 @Composable
-private fun LoadingUi() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
 private fun ListTopBar(searchText: TextFieldValue, updateSearchText: (TextFieldValue) -> Unit) {
     val focusManger = LocalFocusManager.current
     Row(
@@ -185,7 +181,7 @@ private fun ListTopBar(searchText: TextFieldValue, updateSearchText: (TextFieldV
 }
 
 @Composable
-private fun AddListButton(navigator: AppNavigator) {
+private fun CreateListButton(navigator: AppNavigator) {
     FilledTonalButton(
         onClick = { navigator.navigateToAddListScreen() },
         modifier = Modifier.size(64.dp),

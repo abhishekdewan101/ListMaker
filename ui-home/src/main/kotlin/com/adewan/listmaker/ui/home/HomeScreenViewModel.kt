@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed interface HomeScreenState {
-    data class ListPresent(val lists: List<Collection>) : HomeScreenState
-    object EmptyList : HomeScreenState
+    data class Result(val data: List<Collection>) : HomeScreenState
+    object Empty : HomeScreenState
     object Loading : HomeScreenState
 }
 
@@ -30,9 +30,9 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             listRepository.getAllLists().collect {
                 if (it.isEmpty()) {
-                    _uiState.value = HomeScreenState.EmptyList
+                    _uiState.value = HomeScreenState.Empty
                 } else {
-                    _uiState.value = HomeScreenState.ListPresent(lists = it)
+                    _uiState.value = HomeScreenState.Result(data = it)
                 }
             }
         }

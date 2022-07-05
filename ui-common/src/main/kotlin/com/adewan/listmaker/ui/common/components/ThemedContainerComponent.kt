@@ -1,4 +1,4 @@
-package com.adewan.listmaker.ui.common
+package com.adewan.listmaker.ui.common.components
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -7,7 +7,7 @@ import androidx.compose.runtime.SideEffect
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun ThemedContainer(content: @Composable () -> Unit) {
+fun ThemedContainerComponent(content: @Composable () -> Unit) {
     val controller = rememberSystemUiController()
     val useDarkIcon = !isSystemInDarkTheme()
     val systemBarColor = MaterialTheme.colorScheme.background
