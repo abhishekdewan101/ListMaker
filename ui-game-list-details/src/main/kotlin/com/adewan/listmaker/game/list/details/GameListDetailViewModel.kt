@@ -1,4 +1,4 @@
-package com.adewan.listmaker.list.details
+package com.adewan.listmaker.game.list.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +20,7 @@ sealed interface ListDetailUiState {
 }
 
 @HiltViewModel
-class ListDetailViewModel @Inject constructor(
+class GameListDetailViewModel @Inject constructor(
     private val listRepository: ListRepository,
     private val gameRepository: GameRepository
 ) : ViewModel() {

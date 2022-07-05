@@ -30,6 +30,10 @@ class AppNavigatorImpl(private val navController: NavController) : AppNavigator 
                 val injectedRoute = Screen.GameListDetail.route.replace("{listId}", id.toString())
                 navController.navigate(injectedRoute)
             }
+            CollectionType.MOVIES -> {
+                val injectedRoute = Screen.MovieListDetail.route.replace("{listId}", id.toString())
+                navController.navigate(injectedRoute)
+            }
             else -> {}
         }
 

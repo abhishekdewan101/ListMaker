@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
-package com.adewan.listmaker.list.details
+package com.adewan.listmaker.game.list.details
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -51,10 +51,10 @@ import kotlin.math.roundToInt
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ListDetailsScreen(
+fun GameListDetailScreen(
     navigator: AppNavigator,
     id: String,
-    viewModel: ListDetailViewModel = hiltViewModel()
+    viewModel: GameListDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 

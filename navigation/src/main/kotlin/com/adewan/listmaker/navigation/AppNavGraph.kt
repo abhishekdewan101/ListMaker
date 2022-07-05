@@ -9,11 +9,12 @@ import androidx.navigation.navArgument
 import com.adewan.listmaker.add.game.AddGameScreen
 import com.adewan.listmaker.common.navigation.AppNavigatorImpl
 import com.adewan.listmaker.common.navigation.Screen
+import com.adewan.listmaker.game.list.details.GameListDetailScreen
 import com.adewan.listmaker.list.create.CreateListScreen
-import com.adewan.listmaker.list.details.ListDetailsScreen
 import com.adewan.listmaker.navigation.utils.enterFromBottomExitToBottom
 import com.adewan.listmaker.navigation.utils.enterFromRightExitToRight
 import com.adewan.listmaker.ui.home.HomeScreen
+import com.adewan.listmaker.ui.movie.list.details.MovieListDetailScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -38,7 +39,15 @@ fun AppNavGraph() {
             arguments = listOf(navArgument("listId") { type = NavType.StringType })
         ) {
             val listId = it.arguments?.getString("listId")!!
-            ListDetailsScreen(navigator = appNavigator, id = listId)
+            GameListDetailScreen(navigator = appNavigator, id = listId)
+        }
+
+        enterFromRightExitToRight(
+            route = Screen.MovieListDetail.route,
+            arguments = listOf(navArgument("listId") { type = NavType.StringType })
+        ) {
+            val listId = it.arguments?.getString("listId")!!
+            MovieListDetailScreen(navigator = appNavigator, listId = listId)
         }
 
         enterFromBottomExitToBottom(

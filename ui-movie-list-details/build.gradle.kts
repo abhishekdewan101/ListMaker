@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.adewan.listmaker.ui.game.list.details"
+    namespace = "com.adewan.listmaker.ui.movie.list.details"
 }
 
 dependencies {
