@@ -1,19 +1,18 @@
 package com.adewan.listmaker.repositories.implemenatation
 
-import com.adewan.listmaker.db.GameCollectionEntries
-import com.adewan.listmaker.db.ListMakerDB
+import com.adewan.listmaker.database.Database
+import com.adewan.listmaker.database.GameListEntry
 import com.adewan.listmaker.models.IGDBGame
 import com.adewan.listmaker.repositories.AuthenticationRepository
 import com.adewan.listmaker.repositories.GameRepository
 import com.adewan.listmaker.services.NetworkServices
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import java.util.UUID
 import javax.inject.Inject
 
 class GameRepositoryImpl @Inject constructor(
-    private val database: ListMakerDB,
+    private val database: Database,
     private val networkServices: NetworkServices,
     private val authenticationRepository: AuthenticationRepository
 ) : GameRepository {
@@ -26,22 +25,23 @@ class GameRepositoryImpl @Inject constructor(
         releaseDate: Long?,
         summary: String?
     ) {
-        database.gameCollectionEntriesQueries.insertGame(
-            slug = id.toString(),
-            name = name,
-            posterUrl = posterUrl,
-            rating = rating,
-            parentList = parentList,
-            releaseDate = releaseDate,
-            summary = summary
-        )
+//        database.gameCollectionEntriesQueries.insertGame(
+//            slug = id.toString(),
+//            name = name,
+//            posterUrl = posterUrl,
+//            rating = rating,
+//            parentList = parentList,
+//            releaseDate = releaseDate,
+//            summary = summary
+//        )
     }
 
-    override fun getAllGamesForId(parentListId: String): Flow<List<GameCollectionEntries>> {
-        return database.gameCollectionEntriesQueries
-            .getGamesForList(parentList = parentListId)
-            .asFlow()
-            .mapToList()
+    override fun getAllGamesForId(parentListId: String): Flow<List<GameListEntry>> {
+        return emptyFlow()
+//        return database.gameCollectionEntriesQueries
+//            .getGamesForList(parentList = parentListId)
+//            .asFlow()
+//            .mapToList()
     }
 
     override suspend fun getLatestGames(): List<IGDBGame> {

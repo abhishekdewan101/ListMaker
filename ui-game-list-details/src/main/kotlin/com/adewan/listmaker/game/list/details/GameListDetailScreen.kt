@@ -114,7 +114,7 @@ private fun ListDetails(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                game.name!!,
+                                game.name,
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Start,
@@ -125,7 +125,7 @@ private fun ListDetails(
                                 overflow = TextOverflow.Ellipsis
                             )
                             Text(
-                                game.summary!!,
+                                game.summary,
                                 style = MaterialTheme.typography.bodySmall,
                                 textAlign = TextAlign.Start,
                                 modifier = Modifier
@@ -135,19 +135,17 @@ private fun ListDetails(
                                 overflow = TextOverflow.Ellipsis
                             )
 
-                            if (game.rating != null) {
-                                Text(
-                                    "${game.rating!!.roundToInt()} / 100",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Start,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(top = 10.dp),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
+                            Text(
+                                "${game.rating.roundToInt()} / 100",
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 10.dp),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
                         }
                     }
                     Divider(modifier = Modifier.padding(horizontal = 10.dp))

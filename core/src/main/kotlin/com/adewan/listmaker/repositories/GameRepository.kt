@@ -1,6 +1,6 @@
 package com.adewan.listmaker.repositories
 
-import com.adewan.listmaker.db.GameCollectionEntries
+import com.adewan.listmaker.database.GameListEntry
 import com.adewan.listmaker.models.IGDBGame
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
@@ -16,7 +16,7 @@ interface GameRepository {
         summary: String?
     )
 
-    fun getAllGamesForId(parentListId: String): Flow<List<GameCollectionEntries>>
+    fun getAllGamesForId(parentListId: String): Flow<List<GameListEntry>>
 
     suspend fun getLatestGames(): List<IGDBGame>
 

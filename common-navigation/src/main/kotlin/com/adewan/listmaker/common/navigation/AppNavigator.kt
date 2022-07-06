@@ -1,13 +1,13 @@
 package com.adewan.listmaker.common.navigation
 
 import androidx.navigation.NavController
-import com.adewan.listmaker.models.CollectionType
+import com.adewan.listmaker.database.CoreListType
 import java.util.UUID
 
 interface AppNavigator {
     fun popCurrentRoute()
     fun navigateToAddListScreen()
-    fun navigateToListDetailScreen(id: UUID, type: CollectionType)
+    fun navigateToListDetailScreen(id: UUID, type: CoreListType)
     fun navigateToAddGameScreen(id: String)
 }
 
@@ -23,14 +23,14 @@ class AppNavigatorImpl(private val navController: NavController) : AppNavigator 
 
     override fun navigateToListDetailScreen(
         id: UUID,
-        type: CollectionType
+        type: CoreListType
     ) {
         when (type) {
-            CollectionType.GAMES -> {
+            CoreListType.GAMES -> {
                 val injectedRoute = Screen.GameListDetail.route.replace("{listId}", id.toString())
                 navController.navigate(injectedRoute)
             }
-            CollectionType.MOVIES -> {
+            CoreListType.MOVIES -> {
                 val injectedRoute = Screen.MovieListDetail.route.replace("{listId}", id.toString())
                 navController.navigate(injectedRoute)
             }

@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
     id("com.adewan.android.library")
-    id("com.squareup.sqldelight")
     id("com.adewan.hilt.plugin")
     id("kotlinx-serialization")
 }
@@ -27,18 +26,9 @@ android {
     }
 }
 
-sqldelight {
-    database("ListMakerDB") {
-        packageName = "com.adewan.listmaker.db"
-    }
-}
-
 dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-
-    implementation(libs.sqlDelight.android.driver)
-    implementation(libs.sqlDelight.coroutines)
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
@@ -47,4 +37,8 @@ dependencies {
     implementation(libs.ktor.serialization)
     implementation(libs.ktor.logging)
     implementation(libs.ktor.content.negotiation)
+
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
 }

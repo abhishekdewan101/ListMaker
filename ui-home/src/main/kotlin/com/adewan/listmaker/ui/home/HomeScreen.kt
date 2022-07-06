@@ -45,12 +45,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.adewan.listmaker.common.navigation.AppNavigator
-import com.adewan.listmaker.db.Collection
+import com.adewan.listmaker.database.CoreList
 import com.adewan.listmaker.ui.common.capitalize
 import com.adewan.listmaker.ui.common.components.EmptyListComponent
 import com.adewan.listmaker.ui.common.components.LoadingComponent
 import com.adewan.listmaker.ui.common.components.ThemedContainerComponent
-import java.util.UUID
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -89,7 +88,7 @@ fun HomeScreen(navigator: AppNavigator, viewModel: HomeScreenViewModel = hiltVie
 
 @Composable
 private fun HomeScreenListComponent(
-    lists: List<Collection>,
+    lists: List<CoreList>,
     paddingValues: PaddingValues,
     navigator: AppNavigator
 ) {
@@ -100,10 +99,10 @@ private fun HomeScreenListComponent(
             .padding(top = 15.dp, start = 15.dp, end = 15.dp)
             .fillMaxSize()
     ) {
-        groupedList.filter { it.key != null }.forEach { (listType, typeLists) ->
+        groupedList.forEach { (listType, typeLists) ->
             stickyHeader {
                 Text(
-                    capitalize(listType!!),
+                    capitalize(listType),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 10.dp)
@@ -114,8 +113,8 @@ private fun HomeScreenListComponent(
                 Card(
                     onClick = {
                         navigator.navigateToListDetailScreen(
-                            UUID.fromString(item.id),
-                            item.type!!
+                            item.id,
+                            item.type
                         )
                     },
                     modifier = Modifier
@@ -135,7 +134,7 @@ private fun HomeScreenListComponent(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = item.title!!,
+                                text = item.title,
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSecondaryContainer
                             )

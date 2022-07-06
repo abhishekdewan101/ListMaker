@@ -39,7 +39,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.adewan.listmaker.common.navigation.AppNavigator
-import com.adewan.listmaker.models.CollectionType
+import com.adewan.listmaker.database.CoreListType
 import com.adewan.listmaker.ui.common.capitalize
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -47,7 +47,7 @@ import com.adewan.listmaker.ui.common.capitalize
 fun CreateListScreen(navigator: AppNavigator, viewModel: CreateListViewModel = hiltViewModel()) {
     val focusManger = LocalFocusManager.current
     var listName by remember { mutableStateOf(TextFieldValue("")) }
-    var listType by remember { mutableStateOf(CollectionType.GAMES) }
+    var listType by remember { mutableStateOf(CoreListType.GAMES) }
     var listNameInError by remember { mutableStateOf(false) }
 
     Scaffold(topBar = { CreateListTopBar(navigator = navigator) }) { paddingValues ->
@@ -109,7 +109,7 @@ fun CreateListScreen(navigator: AppNavigator, viewModel: CreateListViewModel = h
 }
 
 @Composable
-private fun ListTypeDropDown(listType: CollectionType, updateListType: (CollectionType) -> Unit) {
+private fun ListTypeDropDown(listType: CoreListType, updateListType: (CoreListType) -> Unit) {
     var dropDownExpanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = dropDownExpanded,
@@ -138,7 +138,7 @@ private fun ListTypeDropDown(listType: CollectionType, updateListType: (Collecti
                 dropDownExpanded = false
             }
         ) {
-            CollectionType.values().forEach { selectionOption ->
+            CoreListType.values().forEach { selectionOption ->
                 DropdownMenuItem(
                     onClick = {
                         updateListType(selectionOption)

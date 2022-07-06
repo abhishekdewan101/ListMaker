@@ -2,24 +2,26 @@ package com.adewan.listmaker.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.adewan.listmaker.db.Collection
+import com.adewan.listmaker.database.CoreList
 import com.adewan.listmaker.repositories.AuthenticationRepository
-import com.adewan.listmaker.repositories.ListRepository
+import com.adewan.listmaker.repositories.CoreListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 sealed interface HomeScreenState {
-    data class Result(val data: List<Collection>) : HomeScreenState
+    data class Result(val data: List<CoreList>) : HomeScreenState
     object Empty : HomeScreenState
     object Loading : HomeScreenState
 }
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
-    private val listRepository: ListRepository,
+class HomeScreenViewModel
+@Inject
+constructor(
+    private val coreListRepository: CoreListRepository,
     private val authenticationRepository: AuthenticationRepository
 ) : ViewModel() {
 
@@ -28,7 +30,7 @@ class HomeScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            listRepository.getAllLists().collect {
+            coreListRepository.getAllLists().collect {
                 if (it.isEmpty()) {
                     _uiState.value = HomeScreenState.Empty
                 } else {
@@ -36,8 +38,6 @@ class HomeScreenViewModel @Inject constructor(
                 }
             }
         }
-        viewModelScope.launch {
-            authenticationRepository.authenticateUser()
-        }
+        viewModelScope.launch { authenticationRepository.authenticateUser() }
     }
 }
