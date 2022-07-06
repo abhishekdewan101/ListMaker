@@ -95,8 +95,8 @@ private fun ListDetails(
                             painter = rememberAsyncImagePainter(model = game.posterUrl),
                             contentDescription = game.name,
                             modifier =
-                                Modifier.width(125.dp)
-                                    .height(200.dp)
+                                Modifier.width(100.dp)
+                                    .height(150.dp)
                                     .clip(RoundedCornerShape(15.dp)),
                             contentScale = ContentScale.Crop
                         )

@@ -26,21 +26,25 @@ constructor(
     }
 
     override suspend fun getLatestGames(): List<IGDBGame> {
-        return networkServices.getLatestGames(
-            authorization = authenticationRepository.authenticationState.value!!.accessToken,
-            bodyQuery =
-                "f slug,name,cover.id,cover.image_id, summary;" +
-                    "w hypes > 0 & first_release_date >= ${System.currentTimeMillis() / 1000L} & category = 0;\n" +
-                    "s hypes desc;\n" +
-                    "l 75;"
-        )
+        return networkServices
+            .getLatestGames(
+                authorization = authenticationRepository.authenticationState.value!!.accessToken,
+                bodyQuery =
+                    "f slug,name,cover.id,cover.image_id, summary;" +
+                        "w hypes > 0 & first_release_date >= ${System.currentTimeMillis() / 1000L} & category = 0;\n" +
+                        "s hypes desc;\n" +
+                        "l 75;"
+            )
+            .filter { it.coverImage != null }
     }
 
     override suspend fun searchForGame(game: String): List<IGDBGame> {
-        return networkServices.searchForGame(
-            authorization = authenticationRepository.authenticationState.value!!.accessToken,
-            gameQuery =
-                "f slug,name,cover.id,cover.image_id,aggregated_rating, first_release_date, summary;w category = 0; search \"$game\"; l 100;"
-        )
+        return networkServices
+            .searchForGame(
+                authorization = authenticationRepository.authenticationState.value!!.accessToken,
+                gameQuery =
+                    "f slug,name,cover.id,cover.image_id,aggregated_rating, first_release_date, summary;w category = 0; search \"$game\"; l 100;"
+            )
+            .filter { it.coverImage != null }
     }
 }
