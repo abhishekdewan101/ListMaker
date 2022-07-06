@@ -5,10 +5,10 @@ import androidx.room.Room
 import com.adewan.listmaker.database.Database
 import com.adewan.listmaker.repositories.AuthenticationRepository
 import com.adewan.listmaker.repositories.CoreListRepository
-import com.adewan.listmaker.repositories.GameRepository
+import com.adewan.listmaker.repositories.GameListEntryRepository
 import com.adewan.listmaker.repositories.implemenatation.AuthenticationRepositoryImpl
 import com.adewan.listmaker.repositories.implemenatation.CoreListRepositoryImpl
-import com.adewan.listmaker.repositories.implemenatation.GameRepositoryImpl
+import com.adewan.listmaker.repositories.implemenatation.GameListEntryRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -33,7 +33,10 @@ abstract class DataBindingModule {
     @Binds
     abstract fun bindListRepository(listRepositoryImpl: CoreListRepositoryImpl): CoreListRepository
 
-    @Binds abstract fun bindGameRepository(gameRepositoryImpl: GameRepositoryImpl): GameRepository
+    @Binds
+    abstract fun bindGameRepository(
+        gameRepositoryImpl: GameListEntryRepositoryImpl
+    ): GameListEntryRepository
 
     @Binds
     abstract fun bindAuthenticationRepository(

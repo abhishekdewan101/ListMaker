@@ -47,7 +47,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.ui.common.components.EmptyListComponent
-import kotlin.math.roundToInt
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -58,9 +57,7 @@ fun GameListDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(key1 = uiState) {
-        viewModel.getListDetailsForId(id = id)
-    }
+    LaunchedEffect(key1 = uiState) { viewModel.getListDetailsForId(id = id) }
 
     when (uiState) {
         ListDetailUiState.Loading -> LoadingScreen()
@@ -78,38 +75,33 @@ private fun ListDetails(
     id: String
 ) {
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         topBar = { ListDetailTopBar(navigator = navigator, title = state.listName) },
         floatingActionButton = { AddGameButton(navigator = navigator, parentId = id) }
     ) {
         if (state.games.isEmpty()) {
             EmptyListComponent("You've not add any items yet!")
         } else {
-            LazyColumn(
-                modifier = Modifier.padding(it)
-            ) {
+            LazyColumn(modifier = Modifier.padding(it)) {
                 items(state.games.count()) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 10.dp)
-                            .padding(horizontal = 10.dp)
+                        modifier =
+                            Modifier.fillMaxWidth()
+                                .padding(vertical = 10.dp)
+                                .padding(horizontal = 10.dp)
                     ) {
                         val game = state.games[it]
                         Image(
                             painter = rememberAsyncImagePainter(model = game.posterUrl),
                             contentDescription = game.name,
-                            modifier = Modifier
-                                .width(125.dp)
-                                .height(200.dp)
-                                .clip(RoundedCornerShape(15.dp)),
+                            modifier =
+                                Modifier.width(125.dp)
+                                    .height(200.dp)
+                                    .clip(RoundedCornerShape(15.dp)),
                             contentScale = ContentScale.Crop
                         )
                         Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(start = 5.dp),
+                            modifier = Modifier.fillMaxSize().padding(start = 5.dp),
                             verticalArrangement = Arrangement.Top,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -118,9 +110,7 @@ private fun ListDetails(
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Start,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 10.dp),
+                                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -128,22 +118,8 @@ private fun ListDetails(
                                 game.summary,
                                 style = MaterialTheme.typography.bodySmall,
                                 textAlign = TextAlign.Start,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 10.dp),
+                                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
                                 maxLines = 5,
-                                overflow = TextOverflow.Ellipsis
-                            )
-
-                            Text(
-                                "${game.rating.roundToInt()} / 100",
-                                style = MaterialTheme.typography.bodySmall,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 10.dp),
-                                maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
                         }
@@ -161,14 +137,13 @@ private fun LoadingScreen() {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator()
-    }
+    ) { CircularProgressIndicator() }
 }
 
 @Composable
 private fun ListDetailTopBar(navigator: AppNavigator, title: String) {
-    SmallTopAppBar(title = { Text(title) },
+    SmallTopAppBar(
+        title = { Text(title) },
         navigationIcon = {
             IconButton(onClick = { navigator.popCurrentRoute() }) {
                 Icon(
@@ -188,7 +163,10 @@ private fun AddGameButton(navigator: AppNavigator, parentId: String) {
         modifier = Modifier.size(64.dp),
         shape = CircleShape,
         contentPadding = PaddingValues(0.dp),
-        colors = ButtonDefaults.filledTonalButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+        colors =
+            ButtonDefaults.filledTonalButtonColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            )
     ) {
         Icon(
             Icons.Default.Search,

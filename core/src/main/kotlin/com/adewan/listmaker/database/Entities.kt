@@ -26,7 +26,6 @@ data class GameListEntry(
     @PrimaryKey val slug: String,
     @ColumnInfo(name = "game_name") val name: String,
     @ColumnInfo(name = "poster_url") val posterUrl: String,
-    @ColumnInfo(name = "rating") val rating: Double,
     @ColumnInfo(name = "parent_list_id") val parentListId: UUID,
     @ColumnInfo(name = "game_summary") val summary: String
 )
