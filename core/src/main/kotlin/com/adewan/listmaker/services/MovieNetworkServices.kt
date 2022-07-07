@@ -73,4 +73,14 @@ class MovieNetworkServices @Inject constructor() {
         results.addAll(tvShows.data)
         return results
     }
+
+    suspend fun getTrending(
+        tmdbToken: String = BuildConfig.TMDBToken,
+    ): TMDBMovieList {
+        return client
+            .get {
+                url { takeFrom("https://api.themoviedb.org/3/trending/all/day?api_key=$tmdbToken") }
+            }
+            .body()
+    }
 }

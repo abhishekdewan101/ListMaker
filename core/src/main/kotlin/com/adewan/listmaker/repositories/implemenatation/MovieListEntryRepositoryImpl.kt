@@ -13,4 +13,8 @@ constructor(private val movieNetworkServices: MovieNetworkServices) : MovieListE
     override suspend fun searchForMoviesAndShows(searchString: String): List<TMDBMovie> {
         return movieNetworkServices.searchForMoviesAndShows(searchString = searchString)
     }
+
+    override suspend fun getTrending(): List<TMDBMovie> {
+        return movieNetworkServices.getTrending().data
+    }
 }

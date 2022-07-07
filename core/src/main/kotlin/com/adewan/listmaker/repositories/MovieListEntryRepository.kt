@@ -4,4 +4,6 @@ import com.adewan.listmaker.models.TMDBMovie
 
 interface MovieListEntryRepository {
     suspend fun searchForMoviesAndShows(searchString: String): List<TMDBMovie>
+
+    suspend fun getTrending(): List<TMDBMovie>
 }
