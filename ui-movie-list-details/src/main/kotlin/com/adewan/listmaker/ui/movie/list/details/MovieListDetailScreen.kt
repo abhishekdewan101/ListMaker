@@ -10,14 +10,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.adewan.listmaker.common.navigation.AppNavigator
 
 @Composable
-fun MovieListDetailScreen(navigator: AppNavigator, listId: String) {
+fun MovieListDetailScreen(
+    navigator: AppNavigator,
+    listId: String,
+    viewModel: MovieListDetailViewModel = hiltViewModel()
+) {
     Scaffold(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.padding(it)) {
-            Text(text = "Movie Detail Screen $listId")
-        }
+        Column(modifier = Modifier.padding(it)) { Text(text = "Movie Detail Screen $listId") }
     }
-
 }

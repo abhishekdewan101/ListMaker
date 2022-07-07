@@ -29,3 +29,11 @@ data class GameListEntry(
     @ColumnInfo(name = "parent_list_id") val parentListId: UUID,
     @ColumnInfo(name = "game_summary") val summary: String
 )
+
+@Entity
+data class MovieListEntry(
+    @PrimaryKey val id: Int,
+    @ColumnInfo(name = "movie_name") val name: String,
+    @ColumnInfo(name = "poster_url") val posterUrl: String,
+    @ColumnInfo(name = "parent_list_id") val parentListId: UUID,
+)

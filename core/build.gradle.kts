@@ -20,9 +20,12 @@ android {
         properties.setProperty("clientAuthenticationUrl", "")
     }
 
+    kapt { arguments { arg("room.schemaLocation", "$projectDir/schemas") } }
+
     defaultConfig {
         buildConfigField("String", "AuthenticationUrl", properties.getProperty("authenticationUrl"))
         buildConfigField("String", "ClientId", properties.getProperty("clientId"))
+        buildConfigField("String", "TMDBToken", properties.getProperty("tmdbToken"))
     }
 }
 
