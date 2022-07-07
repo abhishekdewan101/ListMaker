@@ -56,10 +56,10 @@ fun GameListDetailScreen(
     LaunchedEffect(key1 = uiState) { viewModel.getListDetailsForId(id = id) }
     ThemedContainerComponent {
         when (uiState) {
-            ListDetailState.Loading -> LoadingComponent()
-            ListDetailState.Empty -> EmptyListComponent("You've not add any items yet!")
-            is ListDetailState.Results -> {
-                val listState = uiState as ListDetailState.Results
+            GameListDetailState.Loading -> LoadingComponent()
+            GameListDetailState.Empty -> EmptyListComponent("You've not add any items yet!")
+            is GameListDetailState.Result -> {
+                val listState = uiState as GameListDetailState.Result
                 ListDetails(navigator = navigator, state = listState, id = id)
             }
         }
@@ -67,7 +67,7 @@ fun GameListDetailScreen(
 }
 
 @Composable
-private fun ListDetails(navigator: AppNavigator, state: ListDetailState.Results, id: String) {
+private fun ListDetails(navigator: AppNavigator, state: GameListDetailState.Result, id: String) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { ListDetailTopBar(navigator = navigator, title = state.title) },

@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-sealed interface ListDetailState {
-    object Loading : ListDetailState
-    object Empty : ListDetailState
-    data class Results(val title: String, val data: List<GameListEntry>) : ListDetailState
+sealed interface GameListDetailState {
+    object Loading : GameListDetailState
+    object Empty : GameListDetailState
+    data class Result(val title: String, val data: List<GameListEntry>) : GameListDetailState
 }
 
 @HiltViewModel
@@ -28,7 +28,7 @@ constructor(
     @Named("io") private val io: CoroutineScope
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<ListDetailState>(ListDetailState.Loading)
+    private val _uiState = MutableStateFlow<GameListDetailState>(GameListDetailState.Loading)
     val uiState = _uiState.asStateFlow()
 
     fun getListDetailsForId(id: String) {
@@ -39,9 +39,9 @@ constructor(
             }
             gameListEntryRepository.getAllForId(parentListId = UUID.fromString(id)).collect {
                 if (it.isEmpty()) {
-                    _uiState.value = ListDetailState.Empty
+                    _uiState.value = GameListDetailState.Empty
                 }
-                _uiState.value = ListDetailState.Results(title = list!!.title, data = it)
+                _uiState.value = GameListDetailState.Result(title = list!!.title, data = it)
             }
         }
     }
