@@ -21,4 +21,6 @@ interface GameListEntryDao {
     fun getAllForList(parentListId: UUID): Flow<List<GameListEntry>>
 
     @Insert fun insert(gameListEntry: GameListEntry)
+
+    @Query("SELECT slug FROM GameListEntry") fun getAllSlugs(): List<String>
 }

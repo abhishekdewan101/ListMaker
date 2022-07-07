@@ -25,6 +25,10 @@ constructor(
         return database.gameListEntryDao().getAllForList(parentListId)
     }
 
+    override fun getAllStoredSlugs(): List<String> {
+        return database.gameListEntryDao().getAllSlugs()
+    }
+
     override suspend fun getLatestGames(): List<IGDBGame> {
         return networkServices
             .getLatestGames(

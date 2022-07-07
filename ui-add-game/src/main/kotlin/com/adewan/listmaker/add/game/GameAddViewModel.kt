@@ -1,7 +1,6 @@
 package com.adewan.listmaker.add.game
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.adewan.listmaker.database.GameListEntry
 import com.adewan.listmaker.models.IGDBGame
 import com.adewan.listmaker.repositories.GameListEntryRepository
@@ -30,12 +29,11 @@ constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            _uiState.value =
-                GameAddScreenState.Result(
-                    data = gameListEntryRepository.getLatestGames(),
-                    title = "Coming soon"
-                )
+        io.launch {
+            val allSlugs = gameListEntryRepository.getAllStoredSlugs()
+            val latestGames = gameListEntryRepository.getLatestGames()
+            val filteredGames = latestGames.filter { allSlugs.contains(it.slug).not() }
+            _uiState.value = GameAddScreenState.Result(data = filteredGames, title = "Coming soon")
         }
     }
 
@@ -55,12 +53,12 @@ constructor(
 
     fun searchForGame(game: String) {
         _uiState.value = GameAddScreenState.Loading
-        viewModelScope.launch {
+        io.launch {
+            val allSlugs = gameListEntryRepository.getAllStoredSlugs()
+            val searchResults = gameListEntryRepository.searchForGame(game)
+            val filteredGames = searchResults.filter { allSlugs.contains(it.slug).not() }
             _uiState.value =
-                GameAddScreenState.Result(
-                    data = gameListEntryRepository.searchForGame(game),
-                    title = "Search results"
-                )
+                GameAddScreenState.Result(data = filteredGames, title = "Search results")
         }
     }
 }

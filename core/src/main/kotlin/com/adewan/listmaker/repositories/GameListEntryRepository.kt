@@ -10,6 +10,8 @@ interface GameListEntryRepository {
 
     fun getAllForId(parentListId: UUID): Flow<List<GameListEntry>>
 
+    fun getAllStoredSlugs(): List<String>
+
     suspend fun getLatestGames(): List<IGDBGame>
 
     suspend fun searchForGame(game: String): List<IGDBGame>
