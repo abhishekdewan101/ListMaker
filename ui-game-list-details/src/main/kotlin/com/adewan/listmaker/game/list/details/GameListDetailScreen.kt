@@ -7,14 +7,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -22,7 +21,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -39,14 +37,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.ui.common.components.EmptyListComponent
+import com.adewan.listmaker.ui.common.components.ThemedContainerComponent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -58,74 +56,47 @@ fun GameListDetailScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = uiState) { viewModel.getListDetailsForId(id = id) }
-
-    when (uiState) {
-        ListDetailUiState.Loading -> LoadingScreen()
-        is ListDetailUiState.ListDetailState -> {
-            val listState = uiState as ListDetailUiState.ListDetailState
-            ListDetails(navigator = navigator, state = listState, id = id)
+    ThemedContainerComponent {
+        when (uiState) {
+            ListDetailState.Loading -> LoadingScreen()
+            ListDetailState.Empty -> EmptyListComponent("You've not add any items yet!")
+            is ListDetailState.Results -> {
+                val listState = uiState as ListDetailState.Results
+                ListDetails(navigator = navigator, state = listState, id = id)
+            }
         }
     }
 }
 
 @Composable
-private fun ListDetails(
-    navigator: AppNavigator,
-    state: ListDetailUiState.ListDetailState,
-    id: String
-) {
+private fun ListDetails(navigator: AppNavigator, state: ListDetailState.Results, id: String) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { ListDetailTopBar(navigator = navigator, title = state.listName) },
+        topBar = { ListDetailTopBar(navigator = navigator, title = state.title) },
         floatingActionButton = { AddGameButton(navigator = navigator, parentId = id) }
-    ) {
-        if (state.games.isEmpty()) {
-            EmptyListComponent("You've not add any items yet!")
-        } else {
-            LazyColumn(modifier = Modifier.padding(it)) {
-                items(state.games.count()) {
-                    Row(
-                        modifier =
-                            Modifier.fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 10.dp)
-                    ) {
-                        val game = state.games[it]
-                        Image(
-                            painter = rememberAsyncImagePainter(model = game.posterUrl),
-                            contentDescription = game.name,
-                            modifier =
-                                Modifier.width(100.dp)
-                                    .height(150.dp)
-                                    .clip(RoundedCornerShape(15.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-                        Column(
-                            modifier = Modifier.fillMaxSize().padding(start = 5.dp),
-                            verticalArrangement = Arrangement.Top,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                game.name,
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                            Text(
-                                game.summary,
-                                style = MaterialTheme.typography.bodySmall,
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-                                maxLines = 5,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
-                    Divider(modifier = Modifier.padding(horizontal = 10.dp))
-                }
+    ) { paddingValues ->
+        val configuration = LocalConfiguration.current
+        val screenWidth = configuration.screenWidthDp.dp
+        val imageWidth = (screenWidth - 20.dp) / 3
+        val imageHeight = imageWidth.times(1.7f)
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            modifier = Modifier.padding(paddingValues).padding(horizontal = 5.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(state.data.size) {
+                val game = state.data[it]
+                Image(
+                    painter = rememberAsyncImagePainter(model = game.posterUrl),
+                    contentDescription = game.name,
+                    modifier =
+                        Modifier.width(imageWidth)
+                            .height(imageHeight)
+                            .clip(RoundedCornerShape(15.dp)),
+                    contentScale = ContentScale.Crop
+                )
             }
         }
     }
@@ -143,7 +114,7 @@ private fun LoadingScreen() {
 @Composable
 private fun ListDetailTopBar(navigator: AppNavigator, title: String) {
     SmallTopAppBar(
-        title = { Text(title) },
+        title = { Text(title, fontWeight = FontWeight.Bold) },
         navigationIcon = {
             IconButton(onClick = { navigator.popCurrentRoute() }) {
                 Icon(

@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-sealed interface ListDetailUiState {
-    object Loading : ListDetailUiState
-    data class ListDetailState(val listName: String, val games: List<GameListEntry>) :
-        ListDetailUiState
+sealed interface ListDetailState {
+    object Loading : ListDetailState
+    object Empty : ListDetailState
+    data class Results(val title: String, val data: List<GameListEntry>) : ListDetailState
 }
 
 @HiltViewModel
@@ -28,15 +28,20 @@ constructor(
     @Named("io") private val io: CoroutineScope
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<ListDetailUiState>(ListDetailUiState.Loading)
+    private val _uiState = MutableStateFlow<ListDetailState>(ListDetailState.Loading)
     val uiState = _uiState.asStateFlow()
 
     fun getListDetailsForId(id: String) {
         io.launch {
             val list = coreListRepository.getListForId(id = UUID.fromString(id))
+            assert(list != null) {
+                throw IllegalStateException("List for id cannot be null on detail screen")
+            }
             gameListEntryRepository.getAllForId(parentListId = UUID.fromString(id)).collect {
-                _uiState.value =
-                    ListDetailUiState.ListDetailState(listName = list?.title ?: "", games = it)
+                if (it.isEmpty()) {
+                    _uiState.value = ListDetailState.Empty
+                }
+                _uiState.value = ListDetailState.Results(title = list!!.title, data = it)
             }
         }
     }
