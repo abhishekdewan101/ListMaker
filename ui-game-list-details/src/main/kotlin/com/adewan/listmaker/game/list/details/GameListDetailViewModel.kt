@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 
 sealed interface GameListDetailState {
     object Loading : GameListDetailState
-    object Empty : GameListDetailState
     data class Result(val title: String, val data: List<GameListEntry>) : GameListDetailState
 }
 
@@ -38,9 +37,6 @@ constructor(
                 throw IllegalStateException("List for id cannot be null on detail screen")
             }
             gameListEntryRepository.getAllForId(parentListId = UUID.fromString(id)).collect {
-                if (it.isEmpty()) {
-                    _uiState.value = GameListDetailState.Empty
-                }
                 _uiState.value = GameListDetailState.Result(title = list!!.title, data = it)
             }
         }

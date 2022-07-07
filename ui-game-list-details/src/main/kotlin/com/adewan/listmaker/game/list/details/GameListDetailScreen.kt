@@ -57,7 +57,6 @@ fun GameListDetailScreen(
     ThemedContainerComponent {
         when (uiState) {
             GameListDetailState.Loading -> LoadingComponent()
-            GameListDetailState.Empty -> EmptyListComponent("You've not add any items yet!")
             is GameListDetailState.Result -> {
                 val listState = uiState as GameListDetailState.Result
                 ListDetails(navigator = navigator, state = listState, id = id)
@@ -73,28 +72,32 @@ private fun ListDetails(navigator: AppNavigator, state: GameListDetailState.Resu
         topBar = { ListDetailTopBar(navigator = navigator, title = state.title) },
         floatingActionButton = { AddGameButton(navigator = navigator, parentId = id) }
     ) { paddingValues ->
-        val configuration = LocalConfiguration.current
-        val screenWidth = configuration.screenWidthDp.dp
-        val imageWidth = (screenWidth - 20.dp) / 3
-        val imageHeight = imageWidth.times(1.7f)
+        if (state.data.isEmpty()) {
+            EmptyListComponent("You've not add any items yet!")
+        } else {
+            val configuration = LocalConfiguration.current
+            val screenWidth = configuration.screenWidthDp.dp
+            val imageWidth = (screenWidth - 20.dp) / 3
+            val imageHeight = imageWidth.times(1.7f)
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier.padding(paddingValues).padding(horizontal = 5.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            items(state.data.size) {
-                val game = state.data[it]
-                Image(
-                    painter = rememberAsyncImagePainter(model = game.posterUrl),
-                    contentDescription = game.name,
-                    modifier =
-                        Modifier.width(imageWidth)
-                            .height(imageHeight)
-                            .clip(RoundedCornerShape(15.dp)),
-                    contentScale = ContentScale.Crop
-                )
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                modifier = Modifier.padding(paddingValues).padding(horizontal = 5.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(state.data.size) {
+                    val game = state.data[it]
+                    Image(
+                        painter = rememberAsyncImagePainter(model = game.posterUrl),
+                        contentDescription = game.name,
+                        modifier =
+                            Modifier.width(imageWidth)
+                                .height(imageHeight)
+                                .clip(RoundedCornerShape(15.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
             }
         }
     }
