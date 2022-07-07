@@ -14,26 +14,26 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-sealed interface AddGameUiState {
-    object Loading : AddGameUiState
-    data class Results(val results: List<IGDBGame>, val title: String) : AddGameUiState
+sealed interface GameAddScreenState {
+    object Loading : GameAddScreenState
+    data class Result(val data: List<IGDBGame>, val title: String) : GameAddScreenState
 }
 
 @HiltViewModel
-class AddGameViewModel
+class GameAddViewModel
 @Inject
 constructor(
     private val gameListEntryRepository: GameListEntryRepository,
     @Named("io") private val io: CoroutineScope
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<AddGameUiState>(AddGameUiState.Loading)
+    private val _uiState = MutableStateFlow<GameAddScreenState>(GameAddScreenState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             _uiState.value =
-                AddGameUiState.Results(
-                    results = gameListEntryRepository.getLatestGames(),
+                GameAddScreenState.Result(
+                    data = gameListEntryRepository.getLatestGames(),
                     title = "Coming soon"
                 )
         }
@@ -54,11 +54,11 @@ constructor(
     }
 
     fun searchForGame(game: String) {
-        _uiState.value = AddGameUiState.Loading
+        _uiState.value = GameAddScreenState.Loading
         viewModelScope.launch {
             _uiState.value =
-                AddGameUiState.Results(
-                    results = gameListEntryRepository.searchForGame(game),
+                GameAddScreenState.Result(
+                    data = gameListEntryRepository.searchForGame(game),
                     title = "Search results"
                 )
         }

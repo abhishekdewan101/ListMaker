@@ -6,7 +6,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.adewan.listmaker.add.game.AddGameScreen
+import com.adewan.listmaker.add.game.GameAddScreen
 import com.adewan.listmaker.common.navigation.AppNavigatorImpl
 import com.adewan.listmaker.common.navigation.Screen
 import com.adewan.listmaker.game.list.details.GameListDetailScreen
@@ -26,9 +26,7 @@ fun AppNavGraph() {
     val appNavigator = AppNavigatorImpl(navController = navController)
 
     AnimatedNavHost(navController = navController, startDestination = Screen.Home.route) {
-        composable(route = Screen.Home.route) {
-            HomeScreen(navigator = appNavigator)
-        }
+        composable(route = Screen.Home.route) { HomeScreen(navigator = appNavigator) }
 
         enterFromBottomExitToBottom(route = Screen.AddList.route) {
             CreateListScreen(navigator = appNavigator)
@@ -55,7 +53,7 @@ fun AppNavGraph() {
             arguments = listOf(navArgument("parentId") { type = NavType.StringType })
         ) {
             val parentListId = it.arguments?.getString("parentId")!!
-            AddGameScreen(navigator = appNavigator, parentListId = parentListId)
+            GameAddScreen(navigator = appNavigator, parentListId = parentListId)
         }
     }
 }

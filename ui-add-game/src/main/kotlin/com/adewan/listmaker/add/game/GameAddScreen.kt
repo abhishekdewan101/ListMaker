@@ -50,40 +50,33 @@ import com.adewan.listmaker.models.IGDBGame
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AddGameScreen(
+fun GameAddScreen(
     navigator: AppNavigator,
     parentListId: String,
-    viewModel: AddGameViewModel = hiltViewModel()
+    viewModel: GameAddViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var searchTerms by remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(topBar = { GameSearchTopBar(navigator = navigator) }) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .padding(horizontal = 15.dp)
-        ) {
+        Column(modifier = Modifier.padding(padding).padding(horizontal = 15.dp)) {
             GameSearchBar(value = searchTerms, updateValue = { searchTerms = it }) {
                 viewModel.searchForGame(searchTerms.text)
             }
             when (uiState) {
-                is AddGameUiState.Loading -> LoadingUiState()
-                is AddGameUiState.Results -> ResultUiState(state = (uiState as AddGameUiState.Results)) {
-                    viewModel.saveGameIntoList(parentListId, it)
-                    navigator.popCurrentRoute()
-                }
+                is GameAddScreenState.Loading -> LoadingUiState()
+                is GameAddScreenState.Result ->
+                    ResultUiState(state = (uiState as GameAddScreenState.Result)) {
+                        viewModel.saveGameIntoList(parentListId, it)
+                        navigator.popCurrentRoute()
+                    }
             }
         }
     }
 }
 
 @Composable
-private fun ResultUiState(state: AddGameUiState.Results, onGameSelected: (IGDBGame) -> Unit) {
-    Column(
-        modifier = Modifier
-            .padding(top = 5.dp)
-            .padding(horizontal = 15.dp)
-    ) {
+private fun ResultUiState(state: GameAddScreenState.Result, onGameSelected: (IGDBGame) -> Unit) {
+    Column(modifier = Modifier.padding(top = 5.dp).padding(horizontal = 15.dp)) {
         Text(
             state.title,
             style = MaterialTheme.typography.headlineMedium,
@@ -95,22 +88,20 @@ private fun ResultUiState(state: AddGameUiState.Results, onGameSelected: (IGDBGa
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(top = 15.dp)
         ) {
-            items(state.results.count()) {
+            items(state.data.count()) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(10.dp)
-                        .clickable { onGameSelected(state.results[it]) },
+                    modifier =
+                        Modifier.fillMaxSize().padding(10.dp).clickable {
+                            onGameSelected(state.data[it])
+                        },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val game = state.results[it]
+                    val game = state.data[it]
                     Image(
                         painter = rememberAsyncImagePainter(model = game.coverImage!!.qualifiedUrl),
                         contentDescription = game.name,
-                        modifier = Modifier
-                            .width(100.dp)
-                            .height(175.dp),
+                        modifier = Modifier.width(100.dp).height(175.dp),
                         contentScale = ContentScale.Crop
                     )
                     Text(
@@ -118,9 +109,7 @@ private fun ResultUiState(state: AddGameUiState.Results, onGameSelected: (IGDBGa
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp),
+                        modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -136,9 +125,7 @@ private fun LoadingUiState() {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator()
-    }
+    ) { CircularProgressIndicator() }
 }
 
 @Composable
@@ -150,11 +137,10 @@ private fun GameSearchTopBar(navigator: AppNavigator) {
             Icon(
                 Icons.Default.Close,
                 contentDescription = "close",
-                modifier = Modifier
-                    .size(32.dp)
-                    .clickable { navigator.popCurrentRoute() }
+                modifier = Modifier.size(32.dp).clickable { navigator.popCurrentRoute() }
             )
-        })
+        }
+    )
 }
 
 @Composable
@@ -165,21 +151,13 @@ private fun GameSearchBar(
 ) {
     OutlinedTextField(
         value = value,
-        onValueChange = {
-            updateValue(it)
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 15.dp),
+        onValueChange = { updateValue(it) },
+        modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp),
         maxLines = 1,
         singleLine = true,
-        label = {
-            Text(text = "Search Games")
-        },
+        label = { Text(text = "Search Games") },
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "") },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = {
-            onSearch()
-        })
+        keyboardActions = KeyboardActions(onSearch = { onSearch() })
     )
 }
