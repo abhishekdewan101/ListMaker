@@ -5,7 +5,6 @@ package com.adewan.listmaker.game.list.details
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -20,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -33,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -44,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.ui.common.components.EmptyListComponent
+import com.adewan.listmaker.ui.common.components.LoadingComponent
 import com.adewan.listmaker.ui.common.components.ThemedContainerComponent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -58,7 +56,7 @@ fun GameListDetailScreen(
     LaunchedEffect(key1 = uiState) { viewModel.getListDetailsForId(id = id) }
     ThemedContainerComponent {
         when (uiState) {
-            ListDetailState.Loading -> LoadingScreen()
+            ListDetailState.Loading -> LoadingComponent()
             ListDetailState.Empty -> EmptyListComponent("You've not add any items yet!")
             is ListDetailState.Results -> {
                 val listState = uiState as ListDetailState.Results
@@ -100,15 +98,6 @@ private fun ListDetails(navigator: AppNavigator, state: ListDetailState.Results,
             }
         }
     }
-}
-
-@Composable
-private fun LoadingScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) { CircularProgressIndicator() }
 }
 
 @Composable

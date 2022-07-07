@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 
 package com.adewan.listmaker.add.game
 
@@ -7,7 +7,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,12 +14,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,8 +34,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -47,6 +51,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.models.IGDBGame
+import com.adewan.listmaker.ui.common.components.LoadingComponent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -57,15 +62,22 @@ fun GameAddScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var searchTerms by remember { mutableStateOf(TextFieldValue("")) }
+
     Scaffold(topBar = { GameSearchTopBar(navigator = navigator) }) { padding ->
         Column(modifier = Modifier.padding(padding).padding(horizontal = 15.dp)) {
+            Text(
+                text = "Add game",
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
             GameSearchBar(value = searchTerms, updateValue = { searchTerms = it }) {
                 viewModel.searchForGame(searchTerms.text)
             }
             when (uiState) {
-                is GameAddScreenState.Loading -> LoadingUiState()
+                is GameAddScreenState.Loading -> LoadingComponent()
                 is GameAddScreenState.Result ->
-                    ResultUiState(state = (uiState as GameAddScreenState.Result)) {
+                    SearchResultsComponent(state = (uiState as GameAddScreenState.Result)) {
                         viewModel.saveGameIntoList(parentListId, it)
                         navigator.popCurrentRoute()
                     }
@@ -75,25 +87,25 @@ fun GameAddScreen(
 }
 
 @Composable
-private fun ResultUiState(state: GameAddScreenState.Result, onGameSelected: (IGDBGame) -> Unit) {
-    Column(modifier = Modifier.padding(top = 5.dp).padding(horizontal = 15.dp)) {
-        Text(
-            state.title,
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
+private fun SearchResultsComponent(
+    state: GameAddScreenState.Result,
+    onGameSelected: (IGDBGame) -> Unit
+) {
+    Column(modifier = Modifier.padding(top = 5.dp)) {
+        val configuration = LocalConfiguration.current
+        val screenWidth = configuration.screenWidthDp.dp
+        val imageWidth = (screenWidth - 20.dp) / 3
+        val imageHeight = imageWidth.times(1.7f)
+
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(top = 15.dp)
+            columns = GridCells.Fixed(3),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.padding(horizontal = 5.dp)
         ) {
             items(state.data.count()) {
                 Column(
-                    modifier =
-                        Modifier.fillMaxSize().padding(10.dp).clickable {
-                            onGameSelected(state.data[it])
-                        },
+                    modifier = Modifier.clickable { onGameSelected(state.data[it]) },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -101,7 +113,10 @@ private fun ResultUiState(state: GameAddScreenState.Result, onGameSelected: (IGD
                     Image(
                         painter = rememberAsyncImagePainter(model = game.coverImage!!.qualifiedUrl),
                         contentDescription = game.name,
-                        modifier = Modifier.width(100.dp).height(175.dp),
+                        modifier =
+                            Modifier.width(imageWidth)
+                                .height(imageHeight)
+                                .clip(RoundedCornerShape(15.dp)),
                         contentScale = ContentScale.Crop
                     )
                     Text(
@@ -110,7 +125,7 @@ private fun ResultUiState(state: GameAddScreenState.Result, onGameSelected: (IGD
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-                        maxLines = 1,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -120,26 +135,17 @@ private fun ResultUiState(state: GameAddScreenState.Result, onGameSelected: (IGD
 }
 
 @Composable
-private fun LoadingUiState() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) { CircularProgressIndicator() }
-}
-
-@Composable
 private fun GameSearchTopBar(navigator: AppNavigator) {
     SmallTopAppBar(
-        title = {},
-        modifier = Modifier.padding(start = 10.dp),
         navigationIcon = {
             Icon(
                 Icons.Default.Close,
-                contentDescription = "close",
+                contentDescription = "Close add list screen",
                 modifier = Modifier.size(32.dp).clickable { navigator.popCurrentRoute() }
             )
-        }
+        },
+        title = {},
+        modifier = Modifier.padding(start = 10.dp)
     )
 }
 
@@ -149,6 +155,9 @@ private fun GameSearchBar(
     updateValue: (TextFieldValue) -> Unit,
     onSearch: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     OutlinedTextField(
         value = value,
         onValueChange = { updateValue(it) },
@@ -158,6 +167,13 @@ private fun GameSearchBar(
         label = { Text(text = "Search Games") },
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "") },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = { onSearch() })
+        keyboardActions =
+            KeyboardActions(
+                onSearch = {
+                    onSearch()
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                }
+            )
     )
 }
