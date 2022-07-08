@@ -12,20 +12,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -48,6 +44,7 @@ import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.database.CoreList
 import com.adewan.listmaker.ui.common.capitalize
 import com.adewan.listmaker.ui.common.components.EmptyListComponent
+import com.adewan.listmaker.ui.common.components.FloatingActionComponent
 import com.adewan.listmaker.ui.common.components.LoadingComponent
 import com.adewan.listmaker.ui.common.components.ThemedContainerComponent
 
@@ -58,22 +55,24 @@ fun HomeScreen(navigator: AppNavigator, viewModel: HomeScreenViewModel = hiltVie
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
     ThemedContainerComponent {
         Scaffold(
-            floatingActionButton = { CreateListButton(navigator = navigator) },
-            topBar = {
-                ListTopBar(searchText = searchText) {
-                    searchText = it
+            floatingActionButton = {
+                FloatingActionComponent(icon = Icons.Default.Add) {
+                    navigator.navigateToAddListScreen()
                 }
-            }) { paddingValues ->
+            },
+            topBar = { ListTopBar(searchText = searchText) { searchText = it } }
+        ) { paddingValues ->
             when (uiState) {
                 is HomeScreenState.Loading -> LoadingComponent()
-                is HomeScreenState.Empty -> EmptyListComponent(message = "You've not created any lists yet!")
+                is HomeScreenState.Empty ->
+                    EmptyListComponent(message = "You've not created any lists yet!")
                 is HomeScreenState.Result -> {
                     val state = uiState as HomeScreenState.Result
                     val filteredLists =
                         if (searchText.text.isBlank()) {
                             state.data
                         } else {
-                            state.data.filter { it.title?.contains(searchText.text) ?: false }
+                            state.data.filter { it.title.contains(searchText.text) ?: false }
                         }
                     HomeScreenListComponent(
                         lists = filteredLists,
@@ -94,10 +93,10 @@ private fun HomeScreenListComponent(
 ) {
     val groupedList = lists.groupBy { it.type }
     LazyColumn(
-        modifier = Modifier
-            .padding(paddingValues)
-            .padding(top = 15.dp, start = 15.dp, end = 15.dp)
-            .fillMaxSize()
+        modifier =
+            Modifier.padding(paddingValues)
+                .padding(top = 15.dp, start = 15.dp, end = 15.dp)
+                .fillMaxSize()
     ) {
         groupedList.forEach { (listType, typeLists) ->
             stickyHeader {
@@ -111,22 +110,15 @@ private fun HomeScreenListComponent(
             items(typeLists.size) {
                 val item = typeLists[it]
                 Card(
-                    onClick = {
-                        navigator.navigateToListDetailScreen(
-                            item.id,
-                            item.type
+                    onClick = { navigator.navigateToListDetailScreen(item.id, item.type) },
+                    modifier = Modifier.fillMaxWidth().height(75.dp).padding(bottom = 10.dp),
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer
                         )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(75.dp)
-                        .padding(bottom = 10.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 10.dp),
+                        modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp),
                         verticalArrangement = Arrangement.Center
                     ) {
                         Row(
@@ -147,14 +139,11 @@ private fun HomeScreenListComponent(
     }
 }
 
-
 @Composable
 private fun ListTopBar(searchText: TextFieldValue, updateSearchText: (TextFieldValue) -> Unit) {
     val focusManger = LocalFocusManager.current
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 15.dp, end = 15.dp, top = 15.dp),
+        modifier = Modifier.fillMaxWidth().padding(start = 15.dp, end = 15.dp, top = 15.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         OutlinedTextField(
@@ -167,31 +156,11 @@ private fun ListTopBar(searchText: TextFieldValue, updateSearchText: (TextFieldV
                 )
             },
             onValueChange = { updateSearchText(it) },
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             maxLines = 1,
             singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = {
-                focusManger.clearFocus(force = true)
-            })
-        )
-    }
-}
-
-@Composable
-private fun CreateListButton(navigator: AppNavigator) {
-    FilledTonalButton(
-        onClick = { navigator.navigateToAddListScreen() },
-        modifier = Modifier.size(64.dp),
-        shape = CircleShape,
-        contentPadding = PaddingValues(0.dp),
-        colors = ButtonDefaults.filledTonalButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-    ) {
-        Icon(
-            Icons.Default.Add,
-            contentDescription = "content description",
-            tint = MaterialTheme.colorScheme.onPrimaryContainer
+            keyboardActions = KeyboardActions(onDone = { focusManger.clearFocus(force = true) })
         )
     }
 }

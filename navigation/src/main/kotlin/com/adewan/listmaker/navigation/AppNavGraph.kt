@@ -45,7 +45,7 @@ fun AppNavGraph() {
             arguments = listOf(navArgument("listId") { type = NavType.StringType })
         ) {
             val listId = it.arguments?.getString("listId")!!
-            MovieListDetailScreen(navigator = appNavigator, listId = listId)
+            MovieListDetailScreen(navigator = appNavigator, id = listId)
         }
 
         enterFromBottomExitToBottom(
