@@ -13,6 +13,7 @@ import com.adewan.listmaker.game.list.details.GameListDetailScreen
 import com.adewan.listmaker.list.create.CreateListScreen
 import com.adewan.listmaker.navigation.utils.enterFromBottomExitToBottom
 import com.adewan.listmaker.navigation.utils.enterFromRightExitToRight
+import com.adewan.listmaker.ui.add.movies.MovieAddScreen
 import com.adewan.listmaker.ui.home.HomeScreen
 import com.adewan.listmaker.ui.movie.list.details.MovieListDetailScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -54,6 +55,14 @@ fun AppNavGraph() {
         ) {
             val parentListId = it.arguments?.getString("parentId")!!
             GameAddScreen(navigator = appNavigator, parentListId = parentListId)
+        }
+
+        enterFromBottomExitToBottom(
+            route = Screen.AddMovie.route,
+            arguments = listOf(navArgument("parentId") { type = NavType.StringType })
+        ) {
+            val parentListId = it.arguments?.getString("parentId")!!
+            MovieAddScreen(navigator = appNavigator, id = parentListId)
         }
     }
 }

@@ -9,8 +9,8 @@ interface AppNavigator {
     fun navigateToAddListScreen()
     fun navigateToListDetailScreen(id: UUID, type: CoreListType)
     fun navigateToAddGameScreen(id: String)
+    fun navigateToAddMovieScreen(id: String)
 }
-
 
 class AppNavigatorImpl(private val navController: NavController) : AppNavigator {
     override fun popCurrentRoute() {
@@ -21,10 +21,7 @@ class AppNavigatorImpl(private val navController: NavController) : AppNavigator 
         navController.navigate(Screen.AddList.route)
     }
 
-    override fun navigateToListDetailScreen(
-        id: UUID,
-        type: CoreListType
-    ) {
+    override fun navigateToListDetailScreen(id: UUID, type: CoreListType) {
         when (type) {
             CoreListType.GAMES -> {
                 val injectedRoute = Screen.GameListDetail.route.replace("{listId}", id.toString())
@@ -36,11 +33,15 @@ class AppNavigatorImpl(private val navController: NavController) : AppNavigator 
             }
             else -> {}
         }
-
     }
 
     override fun navigateToAddGameScreen(id: String) {
-        val injectedRoute = Screen.AddGame.route.replace("{parentId}", id.toString())
+        val injectedRoute = Screen.AddGame.route.replace("{parentId}", id)
+        navController.navigate(injectedRoute)
+    }
+
+    override fun navigateToAddMovieScreen(id: String) {
+        val injectedRoute = Screen.AddMovie.route.replace("{parentId}", id)
         navController.navigate(injectedRoute)
     }
 }

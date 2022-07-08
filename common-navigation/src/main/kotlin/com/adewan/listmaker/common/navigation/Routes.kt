@@ -6,4 +6,5 @@ sealed class Screen(val route: String) {
     object GameListDetail : Screen("gameListDetail/{listId}")
     object MovieListDetail : Screen("movieListDetail/{listId}")
     object AddGame : Screen("addGame/{parentId}")
+    object AddMovie : Screen("addMovie/{parentId}")
 }

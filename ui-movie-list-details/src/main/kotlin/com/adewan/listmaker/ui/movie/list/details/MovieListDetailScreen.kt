@@ -68,7 +68,11 @@ private fun MovieListDetails(
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        floatingActionButton = { FloatingActionComponent(icon = Icons.Default.Search) {} },
+        floatingActionButton = {
+            FloatingActionComponent(icon = Icons.Default.Search) {
+                navigator.navigateToAddMovieScreen(id)
+            }
+        },
         topBar = { ListDetailTopBar(navigator, state.title) }
     ) { paddingValues ->
         if (state.data.isEmpty()) {
