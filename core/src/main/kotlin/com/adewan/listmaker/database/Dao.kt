@@ -31,4 +31,6 @@ interface MovieListEntryDao {
     fun getAllForList(parentListId: UUID): Flow<List<MovieListEntry>>
 
     @Insert fun insert(movieListEntry: MovieListEntry)
+
+    @Query("SELECT id FROM MovieListEntry") fun getAllIds(): List<Int>
 }

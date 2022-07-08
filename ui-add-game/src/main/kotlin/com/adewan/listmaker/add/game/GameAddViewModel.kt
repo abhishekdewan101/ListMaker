@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 sealed interface GameAddScreenState {
     object Loading : GameAddScreenState
-    data class Result(val data: List<IGDBGame>, val title: String) : GameAddScreenState
+    data class Result(val data: List<IGDBGame>) : GameAddScreenState
 }
 
 @HiltViewModel
@@ -33,7 +33,7 @@ constructor(
             val allSlugs = gameListEntryRepository.getAllStoredSlugs()
             val latestGames = gameListEntryRepository.getLatestGames()
             val filteredGames = latestGames.filter { allSlugs.contains(it.slug).not() }
-            _uiState.value = GameAddScreenState.Result(data = filteredGames, title = "Coming soon")
+            _uiState.value = GameAddScreenState.Result(data = filteredGames)
         }
     }
 
@@ -57,8 +57,7 @@ constructor(
             val allSlugs = gameListEntryRepository.getAllStoredSlugs()
             val searchResults = gameListEntryRepository.searchForGame(game)
             val filteredGames = searchResults.filter { allSlugs.contains(it.slug).not() }
-            _uiState.value =
-                GameAddScreenState.Result(data = filteredGames, title = "Search results")
+            _uiState.value = GameAddScreenState.Result(data = filteredGames)
         }
     }
 }

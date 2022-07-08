@@ -14,6 +14,6 @@ data class TMDBMovie(
     @SerialName("id") val id: Int,
     @SerialName("overview") val summary: String
 ) {
-    val qualifiedPosterUrl = "https://image.tmdb.org/t/p/w500/$posterUrl"
-    val qualifiedBackdropUrl = "https://image.tmdb.org/t/p/w500/$backdropUrl"
+    val qualifiedPosterUrl = posterUrl?.let { "https://image.tmdb.org/t/p/w500/$it" }
+    val qualifiedBackdropUrl = backdropUrl?.let { "https://image.tmdb.org/t/p/w500/$it" }
 }

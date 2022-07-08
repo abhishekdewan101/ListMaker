@@ -28,4 +28,12 @@ constructor(
     override suspend fun getAllEntriesId(parentListId: UUID): Flow<List<MovieListEntry>> {
         return database.movieListEntryDao().getAllForList(parentListId = parentListId)
     }
+
+    override suspend fun getAllStoredIds(): List<Int> {
+        return database.movieListEntryDao().getAllIds()
+    }
+
+    override suspend fun insert(movie: MovieListEntry) {
+        database.movieListEntryDao().insert(movie)
+    }
 }
