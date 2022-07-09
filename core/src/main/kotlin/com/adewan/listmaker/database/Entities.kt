@@ -8,9 +8,7 @@ import java.util.UUID
 enum class CoreListType {
     GAMES,
     MOVIES,
-    NOTES,
-    PHOTOS,
-    EXERCISE
+    NOTES
 }
 
 @Entity
