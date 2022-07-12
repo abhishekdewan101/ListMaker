@@ -1,10 +1,6 @@
-plugins {
-    id("com.adewan.compose.library")
-}
+plugins { id("com.adewan.compose.library") }
 
-android {
-    namespace = "com.adewan.listmaker.ui.common"
-}
+android { namespace = "com.adewan.listmaker.ui.common" }
 
 dependencies {
     api(project(":common-navigation"))
@@ -12,4 +8,7 @@ dependencies {
     implementation(libs.accompanist.systemUiController)
     implementation(libs.material3)
     implementation(libs.androidx.compose.foundation)
+
+    implementation(libs.coil.kt)
+    implementation(libs.coil.kt.compose)
 }

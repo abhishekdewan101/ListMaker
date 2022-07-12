@@ -3,7 +3,7 @@ package com.adewan.listmaker.game.list.details
 import androidx.lifecycle.ViewModel
 import com.adewan.listmaker.database.GameListEntry
 import com.adewan.listmaker.repositories.CoreListRepository
-import com.adewan.listmaker.repositories.GameListEntryRepository
+import com.adewan.listmaker.repositories.GameRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.UUID
 import javax.inject.Inject
@@ -23,7 +23,7 @@ class GameListDetailViewModel
 @Inject
 constructor(
     private val coreListRepository: CoreListRepository,
-    private val gameListEntryRepository: GameListEntryRepository,
+    private val gameRepository: GameRepository,
     @Named("io") private val io: CoroutineScope
 ) : ViewModel() {
 
@@ -36,7 +36,7 @@ constructor(
             assert(list != null) {
                 throw IllegalStateException("List for id cannot be null on detail screen")
             }
-            gameListEntryRepository.getAllForId(parentListId = UUID.fromString(id)).collect {
+            gameRepository.getAllForId(parentListId = UUID.fromString(id)).collect {
                 _uiState.value = GameListDetailState.Result(title = list!!.title, data = it)
             }
         }

@@ -1,22 +1,32 @@
 package com.adewan.listmaker.repositories.implemenatation
 
+import com.adewan.listmaker.database.CoreList
+import com.adewan.listmaker.database.CoreListType
 import com.adewan.listmaker.database.Database
 import com.adewan.listmaker.database.GameListEntry
 import com.adewan.listmaker.models.IGDBGame
 import com.adewan.listmaker.repositories.AuthenticationRepository
-import com.adewan.listmaker.repositories.GameListEntryRepository
+import com.adewan.listmaker.repositories.GameRepository
 import com.adewan.listmaker.services.NetworkServices
 import java.util.UUID
 import javax.inject.Inject
+import javax.inject.Named
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
-class GameListEntryRepositoryImpl
+class GameRepositoryImpl
 @Inject
 constructor(
     private val database: Database,
     private val networkServices: NetworkServices,
-    private val authenticationRepository: AuthenticationRepository
-) : GameListEntryRepository {
+    private val authenticationRepository: AuthenticationRepository,
+    @Named("io") io: CoroutineScope
+) : GameRepository {
+
+    init {
+        io.launch { authenticationRepository.authenticateUser() }
+    }
     override fun addListEntry(gameListEntry: GameListEntry) {
         database.gameListEntryDao().insert(gameListEntry)
     }
@@ -50,5 +60,13 @@ constructor(
                     "f slug,name,cover.id,cover.image_id,aggregated_rating, first_release_date, summary;w category = 0; search \"$game\"; l 100;"
             )
             .filter { it.coverImage != null }
+    }
+
+    override suspend fun getAllGameLists(): Flow<List<CoreList>> {
+        return database.coreListDao().getAllForType(type = CoreListType.GAMES)
+    }
+
+    override suspend fun getGamesForList(id: UUID): List<GameListEntry> {
+        return database.gameListEntryDao().getGamesFromList(id)
     }
 }

@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.adewan.listmaker.common.navigation.AppNavigator
-import com.adewan.listmaker.ui.common.components.EmptyListComponent
 import com.adewan.listmaker.ui.common.components.FloatingActionComponent
+import com.adewan.listmaker.ui.common.components.FullScreenMessageComponent
 import com.adewan.listmaker.ui.common.components.LoadingComponent
 import com.adewan.listmaker.ui.common.components.ThemedContainerComponent
 
@@ -76,7 +76,7 @@ private fun MovieListDetails(
         topBar = { ListDetailTopBar(navigator, state.title) }
     ) { paddingValues ->
         if (state.data.isEmpty()) {
-            EmptyListComponent(message = "You've not add any movies yet!")
+            FullScreenMessageComponent(message = "You've not add any movies yet!")
         } else {
             val configuration = LocalConfiguration.current
             val screenWidth = configuration.screenWidthDp.dp

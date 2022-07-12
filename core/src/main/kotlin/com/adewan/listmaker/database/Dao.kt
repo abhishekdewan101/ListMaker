@@ -13,12 +13,18 @@ interface CoreListDao {
     @Query("SELECT * FROM CoreList") fun getAll(): Flow<List<CoreList>>
 
     @Query("SELECT * FROM CoreList where id = :id") fun getCoreListForId(id: UUID): CoreList?
+
+    @Query("SELECT * FROM CoreList where list_type = :type")
+    fun getAllForType(type: CoreListType): Flow<List<CoreList>>
 }
 
 @Dao
 interface GameListEntryDao {
-    @Query("SELECT * FROM GameListEntry where parent_list_id = :parentListId")
-    fun getAllForList(parentListId: UUID): Flow<List<GameListEntry>>
+    @Query("SELECT * FROM GameListEntry where parent_list_id = :id")
+    fun getAllForList(id: UUID): Flow<List<GameListEntry>>
+
+    @Query("SELECT * FROM GameListEntry where parent_list_id= :id limit 6")
+    suspend fun getGamesFromList(id: UUID): List<GameListEntry>
 
     @Insert fun insert(gameListEntry: GameListEntry)
 

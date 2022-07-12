@@ -3,7 +3,7 @@ package com.adewan.listmaker.add.game
 import androidx.lifecycle.ViewModel
 import com.adewan.listmaker.database.GameListEntry
 import com.adewan.listmaker.models.IGDBGame
-import com.adewan.listmaker.repositories.GameListEntryRepository
+import com.adewan.listmaker.repositories.GameRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.UUID
 import javax.inject.Inject
@@ -22,7 +22,7 @@ sealed interface GameAddScreenState {
 class GameAddViewModel
 @Inject
 constructor(
-    private val gameListEntryRepository: GameListEntryRepository,
+    private val gameRepository: GameRepository,
     @Named("io") private val io: CoroutineScope
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<GameAddScreenState>(GameAddScreenState.Loading)
@@ -30,8 +30,8 @@ constructor(
 
     init {
         io.launch {
-            val allSlugs = gameListEntryRepository.getAllStoredSlugs()
-            val latestGames = gameListEntryRepository.getLatestGames()
+            val allSlugs = gameRepository.getAllStoredSlugs()
+            val latestGames = gameRepository.getLatestGames()
             val filteredGames = latestGames.filter { allSlugs.contains(it.slug).not() }
             _uiState.value = GameAddScreenState.Result(data = filteredGames)
         }
@@ -39,7 +39,7 @@ constructor(
 
     fun saveGameIntoList(parenListId: String, game: IGDBGame) {
         io.launch {
-            gameListEntryRepository.addListEntry(
+            gameRepository.addListEntry(
                 GameListEntry(
                     slug = game.slug,
                     name = game.name,
@@ -54,8 +54,8 @@ constructor(
     fun searchForGame(game: String) {
         _uiState.value = GameAddScreenState.Loading
         io.launch {
-            val allSlugs = gameListEntryRepository.getAllStoredSlugs()
-            val searchResults = gameListEntryRepository.searchForGame(game)
+            val allSlugs = gameRepository.getAllStoredSlugs()
+            val searchResults = gameRepository.searchForGame(game)
             val filteredGames = searchResults.filter { allSlugs.contains(it.slug).not() }
             _uiState.value = GameAddScreenState.Result(data = filteredGames)
         }
