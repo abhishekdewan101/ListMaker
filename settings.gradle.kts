@@ -25,6 +25,10 @@ include(":core")
 
 include(":navigation")
 
+include(":home")
+
+include(":tab-games")
+
 include(":ui-add-game")
 
 include(":ui-add-movies")
@@ -34,7 +38,5 @@ include(":ui-list-create")
 include(":ui-game-list-details")
 
 include(":ui-common")
-
-include(":ui-home")
 
 include(":ui-movie-list-details")

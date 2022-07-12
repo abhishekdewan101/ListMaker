@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalAnimationApi::class)
+@file:OptIn(ExperimentalAnimationApi::class, ExperimentalAnimationApi::class)
 
 package com.adewan.listmaker.navigation
 
@@ -10,11 +10,11 @@ import com.adewan.listmaker.add.game.GameAddScreen
 import com.adewan.listmaker.common.navigation.AppNavigatorImpl
 import com.adewan.listmaker.common.navigation.Screen
 import com.adewan.listmaker.game.list.details.GameListDetailScreen
+import com.adewan.listmaker.home.Home
 import com.adewan.listmaker.list.create.CreateListScreen
 import com.adewan.listmaker.navigation.utils.enterFromBottomExitToBottom
 import com.adewan.listmaker.navigation.utils.enterFromRightExitToRight
 import com.adewan.listmaker.ui.add.movies.MovieAddScreen
-import com.adewan.listmaker.ui.home.HomeScreen
 import com.adewan.listmaker.ui.movie.list.details.MovieListDetailScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -27,7 +27,7 @@ fun AppNavGraph() {
     val appNavigator = AppNavigatorImpl(navController = navController)
 
     AnimatedNavHost(navController = navController, startDestination = Screen.Home.route) {
-        composable(route = Screen.Home.route) { HomeScreen(navigator = appNavigator) }
+        composable(route = Screen.Home.route) { Home(appNavigator = appNavigator) }
 
         enterFromBottomExitToBottom(route = Screen.AddList.route) {
             CreateListScreen(navigator = appNavigator)

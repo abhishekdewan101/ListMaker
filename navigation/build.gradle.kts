@@ -4,7 +4,7 @@ android { namespace = "com.adewan.listmaker.navigation" }
 
 dependencies {
     implementation(project(":common-navigation"))
-    implementation(project(":ui-home"))
+    implementation(project(":home"))
     implementation(project(":ui-list-create"))
     implementation(project(":ui-game-list-details"))
     implementation(project(":ui-movie-list-details"))
