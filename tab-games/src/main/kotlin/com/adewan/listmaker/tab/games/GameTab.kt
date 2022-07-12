@@ -124,7 +124,7 @@ private fun GameListPreview(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(data.title, style = MaterialTheme.typography.headlineLarge)
+        Text(data.title, style = MaterialTheme.typography.headlineSmall)
         Text(
             "VIEW ALL",
             style =
