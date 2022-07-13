@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.tab.games.GameTab
 import com.adewan.listmaker.ui.common.components.ThemedContainerComponent
+import com.adewan.listmaker.ui.common.components.UnderConstructionComponent
 
 @Composable
 fun Home(appNavigator: AppNavigator) {
@@ -82,8 +83,8 @@ private fun HomeBottomBar(
 private fun HomePager(navController: NavHostController, appNavigator: AppNavigator) {
     NavHost(navController = navController, startDestination = HomeTabs.Games.route) {
         composable(HomeTabs.Games.route) { GameTab(appNavigator = appNavigator) }
-        composable(HomeTabs.Movies.route) { Text(text = "Movies Tab") }
-        composable(HomeTabs.Notes.route) { Text(text = "Notes Tab") }
-        composable(HomeTabs.Profile.route) { Text(text = "Profile Tab") }
+        composable(HomeTabs.Movies.route) { UnderConstructionComponent() }
+        composable(HomeTabs.Notes.route) { UnderConstructionComponent() }
+        composable(HomeTabs.Profile.route) { UnderConstructionComponent() }
     }
 }
