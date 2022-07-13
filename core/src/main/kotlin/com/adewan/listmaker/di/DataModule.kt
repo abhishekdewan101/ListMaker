@@ -6,11 +6,11 @@ import com.adewan.listmaker.database.Database
 import com.adewan.listmaker.repositories.AuthenticationRepository
 import com.adewan.listmaker.repositories.CoreListRepository
 import com.adewan.listmaker.repositories.GameRepository
-import com.adewan.listmaker.repositories.MovieListEntryRepository
+import com.adewan.listmaker.repositories.MovieRepository
 import com.adewan.listmaker.repositories.implemenatation.AuthenticationRepositoryImpl
 import com.adewan.listmaker.repositories.implemenatation.CoreListRepositoryImpl
 import com.adewan.listmaker.repositories.implemenatation.GameRepositoryImpl
-import com.adewan.listmaker.repositories.implemenatation.MovieListEntryRepositoryImpl
+import com.adewan.listmaker.repositories.implemenatation.MovieRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -44,6 +44,6 @@ abstract class DataBindingModule {
 
     @Binds
     abstract fun bindMovieListEntryRepository(
-        movieListEntryRepositoryImpl: MovieListEntryRepositoryImpl
-    ): MovieListEntryRepository
+        movieListEntryRepositoryImpl: MovieRepositoryImpl
+    ): MovieRepository
 }

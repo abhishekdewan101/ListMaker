@@ -3,7 +3,7 @@ package com.adewan.listmaker.ui.add.movies
 import androidx.lifecycle.ViewModel
 import com.adewan.listmaker.database.MovieListEntry
 import com.adewan.listmaker.models.TMDBMovie
-import com.adewan.listmaker.repositories.MovieListEntryRepository
+import com.adewan.listmaker.repositories.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.UUID
 import javax.inject.Inject
@@ -22,7 +22,7 @@ sealed interface MovieAddState {
 class MovieAddViewModel
 @Inject
 constructor(
-    private val movieListEntryRepository: MovieListEntryRepository,
+    private val movieRepository: MovieRepository,
     @Named("io") private val io: CoroutineScope
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<MovieAddState>(MovieAddState.Loading)
@@ -30,8 +30,8 @@ constructor(
 
     init {
         io.launch {
-            val allIds = movieListEntryRepository.getAllStoredIds()
-            val trending = movieListEntryRepository.getTrending()
+            val allIds = movieRepository.getAllStoredIds()
+            val trending = movieRepository.getTrending()
             val filteredMovies = trending.filter { allIds.contains(it.id).not() }
             _uiState.value = MovieAddState.Result(data = filteredMovies)
         }
@@ -39,7 +39,7 @@ constructor(
 
     fun saveMovieIntoList(parentListId: String, movie: TMDBMovie) {
         io.launch {
-            movieListEntryRepository.insert(
+            movieRepository.insert(
                 MovieListEntry(
                     id = movie.id,
                     name = movie.title ?: movie.name ?: "",
@@ -53,8 +53,8 @@ constructor(
     fun searchForMovie(movie: String) {
         _uiState.value = MovieAddState.Loading
         io.launch {
-            val allIds = movieListEntryRepository.getAllStoredIds()
-            val trending = movieListEntryRepository.searchForMoviesAndShows(movie)
+            val allIds = movieRepository.getAllStoredIds()
+            val trending = movieRepository.searchForMoviesAndShows(movie)
             val filteredMovies = trending.filter { allIds.contains(it.id).not() }
             _uiState.value = MovieAddState.Result(data = filteredMovies)
         }

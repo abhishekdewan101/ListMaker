@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.adewan.listmaker.tab.games
+package com.adewan.listmaker.tab.movies
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,21 +34,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.adewan.listmaker.common.navigation.AppNavigator
 import com.adewan.listmaker.database.CoreList
 import com.adewan.listmaker.database.CoreListType
-import com.adewan.listmaker.database.GameListEntry
+import com.adewan.listmaker.database.MovieListEntry
 import com.adewan.listmaker.ui.common.components.ClickableMessage
 import com.adewan.listmaker.ui.common.components.FullScreenMessageComponent
 import com.adewan.listmaker.ui.common.components.HorizontalImageList
 import com.adewan.listmaker.ui.common.components.HorizontalImageListEntry
 import com.adewan.listmaker.ui.common.components.LoadingComponent
 import com.adewan.listmaker.ui.common.components.OutlinedSearchTextField
-import com.adewan.listmaker.ui.tabs.games.R
+import com.adewan.listmaker.ui.tabs.movies.R
 import java.util.UUID
 import kotlinx.coroutines.launch
 
 @Composable
-fun GameTab(viewModel: GameTabViewModel = hiltViewModel(), appNavigator: AppNavigator) {
+fun MovieTab(viewModel: MovieTabViewModel = hiltViewModel(), appNavigator: AppNavigator) {
     val uiState by viewModel.uiState.collectAsState()
-
     var searchTextValue by remember { mutableStateOf(TextFieldValue("")) }
 
     Scaffold(floatingActionButton = { CreateListButton(appNavigator = appNavigator) }) {
@@ -56,17 +55,17 @@ fun GameTab(viewModel: GameTabViewModel = hiltViewModel(), appNavigator: AppNavi
         Column(modifier = Modifier.fillMaxSize().padding(paddingValues).padding(top = 15.dp)) {
             OutlinedSearchTextField(
                 searchValue = searchTextValue,
-                placeholder = "Filter games lists...",
+                placeholder = "Filter movie lists...",
                 updateValue = { searchTextValue = it }
             ) {}
             when (uiState) {
-                is GameTabState.Loading -> LoadingComponent()
-                is GameTabState.Empty ->
+                is MovieTabState.Loading -> LoadingComponent()
+                is MovieTabState.Empty ->
                     FullScreenMessageComponent(message = "Tap to create your first list") {
                         appNavigator.navigateToAddListScreen()
                     }
-                is GameTabState.Success -> {
-                    val state = uiState as GameTabState.Success
+                is MovieTabState.Success -> {
+                    val state = uiState as MovieTabState.Success
                     val filteredLists =
                         if (searchTextValue.text.isEmpty()) {
                             state.data
@@ -75,8 +74,8 @@ fun GameTab(viewModel: GameTabViewModel = hiltViewModel(), appNavigator: AppNavi
                                 it.title.contains(searchTextValue.text, ignoreCase = true)
                             }
                         }
-                    GamesList(data = filteredLists, appNavigator = appNavigator) {
-                        viewModel.getGamesForList(it)
+                    MovieList(data = filteredLists, appNavigator = appNavigator) {
+                        viewModel.getMovieForList(id = it)
                     }
                 }
             }
@@ -92,34 +91,34 @@ private fun CreateListButton(appNavigator: AppNavigator) {
 }
 
 @Composable
-private fun GamesList(
+private fun MovieList(
     data: List<CoreList>,
     appNavigator: AppNavigator,
-    searchForGames: suspend (UUID) -> List<GameListEntry>
+    searchForMovies: suspend (UUID) -> List<MovieListEntry>
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize().padding(horizontal = 15.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(data.size) {
-            GameListPreview(
+            MovieListPreview(
                 data = data[it],
                 appNavigator = appNavigator,
-                searchForGames = searchForGames
+                searchForMovies = searchForMovies
             )
         }
     }
 }
 
 @Composable
-private fun GameListPreview(
+private fun MovieListPreview(
     data: CoreList,
     appNavigator: AppNavigator,
-    searchForGames: suspend (UUID) -> List<GameListEntry>
+    searchForMovies: suspend (UUID) -> List<MovieListEntry>
 ) {
-    var gamesForList by remember { mutableStateOf<List<GameListEntry>>(emptyList()) }
+    var moviesForList by remember { mutableStateOf<List<MovieListEntry>>(emptyList()) }
     val scope = rememberCoroutineScope()
-    SideEffect { scope.launch { gamesForList = searchForGames(data.id) } }
+    SideEffect { scope.launch { moviesForList = searchForMovies(data.id) } }
     Row(
         modifier = Modifier.fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
@@ -135,18 +134,19 @@ private fun GameListPreview(
                 ),
             modifier =
                 Modifier.clickable {
-                    appNavigator.navigateToListDetailScreen(id = data.id, CoreListType.GAMES)
+                    appNavigator.navigateToListDetailScreen(id = data.id, CoreListType.MOVIES)
                 }
         )
     }
-    if (gamesForList.isEmpty()) {
-        ClickableMessage(icon = R.drawable.heart, message = "Tap to add games") {
-            appNavigator.navigateToAddGameScreen(data.id.toString())
+    if (moviesForList.isEmpty()) {
+        ClickableMessage(icon = R.drawable.heart, message = "Tap to add movies") {
+            appNavigator.navigateToAddMovieScreen(data.id.toString())
         }
     } else {
         HorizontalImageList(
             modifier = Modifier.padding(top = 10.dp),
-            data = gamesForList.map { HorizontalImageListEntry(url = it.posterUrl, name = it.name) }
+            data =
+                moviesForList.map { HorizontalImageListEntry(url = it.posterUrl, name = it.name) }
         )
     }
 }

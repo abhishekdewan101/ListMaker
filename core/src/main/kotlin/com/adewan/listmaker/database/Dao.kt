@@ -36,6 +36,9 @@ interface MovieListEntryDao {
     @Query("SELECT * FROM MovieListEntry where parent_list_id = :parentListId")
     fun getAllForList(parentListId: UUID): Flow<List<MovieListEntry>>
 
+    @Query("SELECT * FROM MovieListEntry where parent_list_id = :id limit 6")
+    suspend fun getMoviesFromList(id: UUID): List<MovieListEntry>
+
     @Insert fun insert(movieListEntry: MovieListEntry)
 
     @Query("SELECT id FROM MovieListEntry") fun getAllIds(): List<Int>

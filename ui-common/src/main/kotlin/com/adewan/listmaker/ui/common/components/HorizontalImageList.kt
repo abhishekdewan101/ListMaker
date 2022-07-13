@@ -13,19 +13,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.adewan.listmaker.database.GameListEntry
+
+data class HorizontalImageListEntry(val url: String, val name: String)
 
 @Composable
-fun HorizontalImageList(modifier: Modifier = Modifier, data: List<GameListEntry>) {
+fun HorizontalImageList(modifier: Modifier = Modifier, data: List<HorizontalImageListEntry>) {
     LazyRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(data.size) {
-            val game = data[it]
+            val entry = data[it]
             Image(
-                painter = rememberAsyncImagePainter(model = game.posterUrl),
-                contentDescription = game.name,
+                painter = rememberAsyncImagePainter(model = entry.url),
+                contentDescription = entry.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.width(125.dp).height(225.dp).clip(RoundedCornerShape(8.dp))
             )

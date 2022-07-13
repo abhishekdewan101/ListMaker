@@ -29,6 +29,8 @@ include(":home")
 
 include(":tab-games")
 
+include(":tab-movies")
+
 include(":ui-add-game")
 
 include(":ui-add-movies")
